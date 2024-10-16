@@ -22,18 +22,11 @@ public class MainController {
 
     @GetMapping("/")
     public String Main(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Authentication의 principal이 OAuth2User인 경우
-            if (authentication.getPrincipal() instanceof OAuth2User) {
-                OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                String username = oAuth2User.getName();  // 사용자 이름 가져오기
-                log.info("인증된 사용자 이름: " + username);
-                return "main";  // 메인 페이지로 이동
-            } else {
-                log.info("OAuth2 인증 사용자가 아닙니다.");
-            }
+        if(authentication == null) {
+            log.info("인증되지 않은 사용자 접속");
+        } else {
+            log.info("authentication.getName() : " + authentication.getName());
         }
-        log.info("인증 정보가 없습니다!");
         return "main";  // 인증되지 않은 경우에도 메인 페이지로
     }
 }

@@ -1,16 +1,15 @@
 package com.example.carmanager.config.jwt;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class JwtTokenDTO {
-    private String accessToken;
-    private String refreshToken;
-
-    public JwtTokenDTO(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
+    private final String grantType;
+    private final String authorizationType;
+    private final String accessToken;
+    private final String refreshToken;
+    private final Long accessTokenExpiresIn;
 }

@@ -1,7 +1,6 @@
 package com.example.carmanager.config;
 
-import com.example.carmanager.config.jwt.JwtTokenFilter;
-import com.example.carmanager.config.jwt.TokenProvider;
+import com.example.carmanager.config.jwt.*;
 import com.example.carmanager.config.oauth.OAuthFailureHandler;
 import com.example.carmanager.config.oauth.OAuthSuccessHandler;
 import com.example.carmanager.user.service.CustomOAuth2UserService;
@@ -13,74 +12,80 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CorsFilter;
 
+
+@EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration
 public class WebOAuthSecurityConfig {
+
+    private final TokenProvider tokenProvider;
+    private final CorsFilter corsFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtSecurityConfig jwtSecurityConfig;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuthSuccessHandler oauthSuccessHandler;
     private final OAuthFailureHandler oauthFailureHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final TokenProvider tokenProvider;
 
     @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring()
-                .requestMatchers("/img/**", "/css/**", "/js/**");
-    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // CSRF 설정 비활성화 (JWT를 사용할 것이므로)
+        http.csrf(AbstractHttpConfigurer::disable)
+                // CORS 필터 적용
+                .addFilterBefore(corsFilter, SessionManagementFilter.class)
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+                // 예외 처리 핸들러 설정 (인증 실패 및 권한 부족 처리)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
+                )
+
+                // 세션 관리 정책 설정 (JWT 사용하므로 세션을 stateless로 설정)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // 인증 및 권한 관련 요청 처리
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/api/token", "/users/**", "/","/board/**").permitAll() // 로그인, 회원가입 관련 API는 인증 없이 접근 가능
+                                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                                .anyRequest().authenticated() // 나머지 요청은 인증 필요
+                )
+
+                // OAuth2 설정 추가
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .loginPage("/")
+                                .userInfoEndpoint(userInfo ->
+                                        userInfo.userService(customOAuth2UserService)
+                                )
+                                .successHandler(oauthSuccessHandler)
+                )
                 .logout(logout ->
                         logout
                                 .logoutUrl("/users/logout")
                                 .deleteCookies("refresh_token")
                                 .logoutSuccessUrl("/")
-                )
-                .headers(headers ->
-                        headers.frameOptions(
-                                HeadersConfigurer.FrameOptionsConfig::disable).disable())
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/token", "/users/**", "/","/board/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-                                .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .loginPage("/")
-                                .userInfoEndpoint(userInfoEndpoint ->
-                                        userInfoEndpoint.userService(customOAuth2UserService)
-                                )
-                                .successHandler(oauthSuccessHandler)
-                                .failureHandler(oauthFailureHandler)
-                )
-
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.defaultAuthenticationEntryPointFor(
-                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                                new AntPathRequestMatcher("/api/**")
-                        )
                 );
-        return http.build();
-    }
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        // JWT 필터 추가
+        jwtSecurityConfig.configure(http);
+
+        return http.build();
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users/")
 public class UserRestController {
     private final UserService userService;
-    /* 자체 회원가입 */
+    /* 회원가입 */
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest userJoinRequest) {
         User join = userService.join(userJoinRequest);

@@ -19,69 +19,35 @@ import java.io.IOException;
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
+
     private final TokenProvider tokenProvider;
 
+    // 실제 필터링 로직은 doFilterInternal 에 들어감
+    // JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext 에 저장하는 역할 수행
     @Override
-    // HTTP 요청이 오면 WAS(tomcat)가 HttpServletRequest, HttpServletResponse 객체를 만들어 줍니다.
-    // 만든 인자 값을 받아옵니다.
-    // 요청이 들어오면 diFilterInternal 이 딱 한번 실행된다.
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // WebSecurityConfig 에서 보았던 UsernamePasswordAuthenticationFilter 보다 먼저 동작을 하게 됩니다.
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        // Access / Refresh 헤더에서 토큰을 가져옴.
-        String accessToken = tokenProvider.getHeaderToken(request, "Access");
-        String refreshToken = tokenProvider.getHeaderToken(request, "Refresh");
+        // 1. Request Header 에서 토큰을 꺼냄
+        String jwt = resolveToken(request);
 
-        if(accessToken != null) {
-            // 어세스 토큰값이 유효하다면 setAuthentication를 통해
-            // security context에 인증 정보저장
-            if(tokenProvider.tokenValidation(accessToken)){
-                setAuthentication(String.valueOf(tokenProvider.getUserIdFromToken(accessToken)));
-            }
-            // 어세스 토큰이 만료된 상황 && 리프레시 토큰 또한 존재하는 상황
-            else if (refreshToken != null) {
-                // 리프레시 토큰 검증 && 리프레시 토큰 DB에서  토큰 존재유무 확인
-                boolean isRefreshToken = tokenProvider.refreshTokenValidation(refreshToken);
-                // 리프레시 토큰이 유효하고 리프레시 토큰이 DB와 비교했을때 똑같다면
-                if (isRefreshToken) {
-                    // 리프레시 토큰으로 아이디 정보 가져오기
-                    String loginId = String.valueOf(tokenProvider.getUserIdFromToken(refreshToken));
-                    // 새로운 어세스 토큰 발급
-                    String newAccessToken = tokenProvider.createToken(Long.parseLong(loginId), "Access");
-                    // 헤더에 어세스 토큰 추가
-                    tokenProvider.setHeaderAccessToken(response, newAccessToken);
-                    // Security context에 인증 정보 넣기
-                    setAuthentication(String.valueOf(tokenProvider.getUserIdFromToken(newAccessToken)));
-                }
-                // 리프레시 토큰이 만료 || 리프레시 토큰이 DB와 비교했을때 똑같지 않다면
-                else {
-                    jwtExceptionHandler(response, "RefreshToken Expired", HttpStatus.BAD_REQUEST);
-                    return;
-                }
-            }
+        // 2. validateToken 으로 토큰 유효성 검사
+        // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Authentication authentication = tokenProvider.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
-    // SecurityContext 에 Authentication 객체를 저장합니다.
-    public void setAuthentication(String email) {
-        Authentication authentication = tokenProvider.createAuthentication(email);
-        // security가 만들어주는 securityContextHolder 그 안에 authentication을 넣어줍니다.
-        // security가 securitycontextholder에서 인증 객체를 확인하는데
-        // jwtAuthfilter에서 authentication을 넣어주면 UsernamePasswordAuthenticationFilter 내부에서 인증이 된 것을 확인하고 추가적인 작업을 진행하지 않습니다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    // Jwt 예외처리
-    public void jwtExceptionHandler(HttpServletResponse response, String msg, HttpStatus status) {
-        response.setStatus(status.value());
-        response.setContentType("application/json");
-        try {
-            String json = new ObjectMapper().writeValueAsString(new GlobalResDTO(msg, status.value()));
-            response.getWriter().write(json);
-        } catch (Exception e) {
-            log.error(e.getMessage());
+    // Request Header 에서 토큰 정보를 꺼내오기
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.split(" ")[1].trim();
         }
+        return null;
     }
 }

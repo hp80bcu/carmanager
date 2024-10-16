@@ -1,5 +1,6 @@
 package com.example.carmanager.config.oauth;
 
+import com.example.carmanager.config.jwt.JwtTokenDTO;
 import com.example.carmanager.config.jwt.TokenProvider;
 import com.example.carmanager.user.dto.OAuthLoginRequest;
 import com.example.carmanager.user.entity.RefreshToken;
@@ -15,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -93,15 +96,24 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         oAuthLoginRequest.setUsername(realName);
         oAuthLoginRequest.setId(foundUser.getUserId());
 
-        // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
-        String refreshToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(REFRESH_TOKEN_DURATION));
-        saveRefreshToken(foundUser.getUserId(), refreshToken);
-        addRefreshTokenToCookie(request, response, refreshToken);
+        // 1. OAuth2 인증된 사용자의 인증 정보를 기반으로 Authentication 객체 생성
+        Authentication authentication = new OAuth2AuthenticationToken(
+                oauth2User,
+                oauth2User.getAuthorities(),
+                oauth2User.getName()
+        );
 
-        String accessToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(ACCESS_TOKEN_DURATION));
-        targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam("token", accessToken)
-                .build().toUriString();
+        // 2. 인증 정보를 기반으로 JWT 토큰 생성
+        JwtTokenDTO jwtTokenDTO = tokenProvider.generateTokenDto(authentication);
+
+        // 3. RefreshToken 저장
+        RefreshToken refreshToken = RefreshToken.builder()
+                .userId(oauth2User.getName())  // OAuth2 사용자 이름을 key로 저장
+                .value(jwtTokenDTO.getRefreshToken())  // 생성한 RefreshToken 저장
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
 
         //clearAuthenticationAttributes(request, response);
 
@@ -115,30 +127,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.sendRedirect("");
     }
 
-    private void saveRefreshToken(Long userId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
-                .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(userId, newRefreshToken));
+    @Transactional
+    public JwtTokenDTO login(OAuth2User oauth2User) {
 
-        refreshTokenRepository.save(refreshToken);
+        // 4. JWT 토큰 반환
+        return jwtTokenDTO;
     }
-
-    private void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
-        int cookieMaxAge = (int) REFRESH_TOKEN_DURATION.toSeconds();
-
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
-        CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
-    }
-
-    private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
-
-//    private String getTargetUrl(String token){
-//        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-//                .queryParam("token", token)
-//                .build()
-//                .toUriString();
-//    }
 }
