@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta https-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+    <style>
+        .gradient-custom {
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+        }
+    </style>
+</head>
+<body class="gradient-custom">
+<section class="d-flex vh-100">
+    <div class="container-fluid row justify-content-center align-content-center">
+        <div class="card bg-dark" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+                <h2 class="text-white">LOGIN</h2>
+                <p class="text-white-50 mt-2 mb-5">서비스를 사용하려면 로그인을 해주세요!</p>
+
+                <div class = "mb-2">
+                    <form id="loginForm" method="POST">
+                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        <div class="mb-3">
+                            <label class="form-label text-white">Email address</label>
+                            <input type="text" class="form-control" name="userId">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">Password</label>
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                        <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+                    </form>
+
+                    <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/join'">회원가입</button>
+                </div>
+                <div class = "mb-2">
+                    <a href="/oauth2/authorization/google">
+                        구글
+                    </a>
+                </div>
+                <div class = "mb-2">
+                    <a href="/oauth2/authorization/naver">
+                        네이버
+                    </a>
+                </div>
+                <div class = "mb-2">
+                    <a href="/oauth2/authorization/kakao">
+                        카카오
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#submitBtn").click(function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            var formData = $("#loginForm").serializeArray();
+            var jsonData = {};
+
+            // Convert form data to JSON
+            $.each(formData, function (_, kv) {
+                jsonData[kv.name] = kv.value;
+            });
+
+            // Send JSON data to backend
+            $.ajax({
+                type: "POST",
+                url: "/users/login",
+                contentType: "application/json",
+                data: JSON.stringify(jsonData),
+                success: function (response) {
+                    // Handle success
+                    console.log("Success:", response);
+                    location.href = "/";
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error("Error:", error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

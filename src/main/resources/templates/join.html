@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta https-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta charset="UTF-8">
+    <title>회원 가입</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+    <style>
+        .gradient-custom {
+            background: linear-gradient(to right, rgba(254, 238, 229, 1), rgba(229, 193, 197, 1))
+        }
+    </style>
+</head>
+<body class="gradient-custom">
+<section class="d-flex vh-100">
+    <div class="container-fluid row justify-content-center align-content-center">
+        <div class="card bg-dark" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+                <h2 class="text-white">SIGN UP</h2>
+                <p class="text-white-50 mt-2 mb-5">서비스 사용을 위한 회원 가입</p>
+ 
+                <div class="mb-2">
+                    <form id="signupForm" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label text-white">아이디</label>
+                            <input type="text" class="form-control" name="userId">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">비밀번호</label>
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">나이</label>
+                            <input type="text" class="form-control" name="age">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">성별</label>
+                            <input type="text" class="form-control" name="gender">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">닉네임</label>
+                            <input type="text" class="form-control" name="nickname">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">국적</label>
+                            <input type="text" class="form-control" name="nationality">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">Email address</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#submitBtn").click(function () {
+            var formData = $("#signupForm").serializeArray();
+            var jsonData = {};
+
+            // Convert form data to JSON
+            $.each(formData, function (_, kv) {
+                jsonData[kv.name] = kv.value;
+            });
+
+            // Send JSON data to backend
+            $.ajax({
+                type: "POST",
+                url: "/users/join",
+                contentType: "application/json",
+                data: JSON.stringify(jsonData),
+                success: function (response) {
+                    // Handle success
+                    console.log("Success:", response);
+                    window.location.assign("/");
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error("Error:", error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
