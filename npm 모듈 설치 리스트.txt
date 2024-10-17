@@ -1,0 +1,5 @@
+npm install typescript@4.9.5
+npm install
+npm install --save-dev @testing-library/jest-dom
+
+npm install @mui/material @emotion/react @emotion/styled

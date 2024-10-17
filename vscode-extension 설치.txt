@@ -1,0 +1,8 @@
+필수
+prettier - 코드 포맷터(alt + shift + f)
+ESLint - 자바스크립트 맞춤법 검사기
+typescript extension pack - 어떤 패키지가 필요한지 알 수 있음
+
+
+선택사항
+vscode-icons
