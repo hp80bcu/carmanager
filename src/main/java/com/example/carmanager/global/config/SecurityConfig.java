@@ -1,8 +1,9 @@
 package com.example.carmanager.global.config;
 
+import com.example.carmanager.global.filter.JwtAuthorizationFilter;
 import com.example.carmanager.global.oauth2.util.TokenProvider;
 import com.example.carmanager.global.OAuthFailureHandler;
-import com.example.carmanager.global.OAuthSuccessHandler;
+import com.example.carmanager.global.filter.handler.OAuthSuccessHandler;
 import com.example.carmanager.global.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity //@Configuration 어노테이션 포함 및 보안 기능 활성화
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtTokenFilter jwtTokenFilter;
+    private final JwtAuthorizationFilter jwtTokenFilter;
     private final TokenProvider tokenProvider;
     private final OAuthSuccessHandler oauthSuccessHandler;
     private final OAuthFailureHandler oauthFailureHandler;

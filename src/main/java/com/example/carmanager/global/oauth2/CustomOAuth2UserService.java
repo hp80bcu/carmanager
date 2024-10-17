@@ -1,6 +1,5 @@
 package com.example.carmanager.global.oauth2;
 
-import com.example.carmanager.global.config.PasswordEncoder;
 import com.example.carmanager.global.oauth2.profile.OAuthAttributes;
 import com.example.carmanager.global.oauth2.profile.OAuthProfile;
 import com.example.carmanager.user.entity.CustomUser;
@@ -8,6 +7,7 @@ import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -22,14 +22,13 @@ import static com.nimbusds.oauth2.sdk.GrantType.PASSWORD;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final DefaultOAuth2UserService delegate;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        OAuth2User oAuth2User = super.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
@@ -40,7 +39,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveUser(OAuthProfile oAuthProfile, String registrationId) {
-        String password = passwordEncoder.bCryptPasswordEncoder(PASSWORD + UUID.randomUUID().toString().substring(0, 8)).toString();
+        String password = passwordEncoder.encode(PASSWORD + UUID.randomUUID().toString().substring(0, 8)).toString();
 
         User check = userRepository.findByNicknameAndEmailAndProvider(oAuthProfile.getName(), oAuthProfile.getEmail(), registrationId);
 

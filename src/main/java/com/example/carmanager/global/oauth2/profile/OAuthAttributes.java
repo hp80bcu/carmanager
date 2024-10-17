@@ -29,7 +29,7 @@ public enum OAuthAttributes {
         Map<String, String> account = (Map<String, String>) attributes.get("kakao_account");
 
         return new OAuthProfile(
-                response,
+                attributes,
                 response.get("nickname").toString(),
                 response.get("name").toString(),
                 account.get("email")

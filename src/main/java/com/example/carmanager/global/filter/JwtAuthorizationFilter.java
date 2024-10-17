@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
@@ -33,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
-        System.out.println("login 외 접근");
+        log.info("login 외 접근");
         tokenProvider.extractAccessToken(request)
                 .filter(tokenProvider::isTokenValid)
                 .ifPresentOrElse(
@@ -55,8 +57,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 .filter(tokenProvider::isTokenValid);
 
         if (refreshToken.isPresent()) {
-            User user = userRepository.findUserByRefreshToken(refreshToken.get())
-                    .orElseThrow(IllegalArgumentException::new);
+            Long userId = refreshTokenRepository.findUserIdByRefreshToken(String.valueOf(refreshToken));
+            User user = userRepository.findByUserId(userId);
             String accessToken = tokenProvider.createAccessToken(user.getEmail());
             tokenProvider.setAccessTokenInHeader(response, accessToken);
             saveAuthentication(accessToken);

@@ -68,7 +68,7 @@ public class SecurityBeanConfig {
     }
 
     @Bean
-    public UserDetailsService userService() {
+    public UserService userService() {
         return new UserService(userRepository, passwordEncoder());
     }
 

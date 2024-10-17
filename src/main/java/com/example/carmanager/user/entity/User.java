@@ -41,7 +41,7 @@ public class User {
     private String phone;
 
     @Column(name = "provider")
-    private static String provider;
+    private String provider;
 
     @UpdateTimestamp    // 현재시간 디폴트값
     @Column(name="createAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
@@ -55,16 +55,17 @@ public class User {
         this.userId = userId;
     }
 
-    public User(String nickname, String email, Date birth, String adress, String phone) {
+    public User(String nickname, String email, Date birth, String adress, String phone, String password) {
         this.nickname = nickname;
         this.email = email;
         this.birth = birth;
         this.adress = adress;
         this.phone = phone;
+        this.password = password;
     }
 
     public static User of(JoinRequest request) {
-        return new User(request.getPassword(), request.getNickname(), request.getBirth(), request.getAdress(), request.getPhone());
+        return new User(request.getNickname(), request.getEmail(), request.getBirth(), request.getAdress(), request.getPhone(), request.getPassword());
     }
 
     public void update(String email, String name) {

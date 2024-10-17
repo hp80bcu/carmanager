@@ -1,55 +1,49 @@
 package com.example.carmanager.global.config;
 
-import com.example.carmanager.config.jwt.*;
-import com.example.carmanager.global.OAuthFailureHandler;
-import com.example.carmanager.global.OAuthSuccessHandler;
-import com.example.carmanager.global.oauth2.util.TokenProvider;
+import com.example.carmanager.global.OAuthAuthorizationRequestBasedOnCookieRepository;
+import com.example.carmanager.global.filter.JsonLoginProcessFilter;
+import com.example.carmanager.global.filter.JwtAuthorizationFilter;
+import com.example.carmanager.global.filter.handler.OAuthSuccessHandler;
 import com.example.carmanager.global.oauth2.CustomOAuth2UserService;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.session.SessionManagementFilter;
-import org.springframework.web.filter.CorsFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebOAuthSecurityConfig {
-
-    private final TokenProvider tokenProvider;
-    private final CorsFilter corsFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtSecurityConfig jwtSecurityConfig;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuthSuccessHandler oauthSuccessHandler;
-    private final OAuthFailureHandler oauthFailureHandler;
+    private final OAuthAuthorizationRequestBasedOnCookieRepository oAuthAuthorizationRequestBasedOnCookieRepository;
+    private final JsonLoginProcessFilter jsonLoginProcessFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정 비활성화 (JWT를 사용할 것이므로)
-        http.csrf(AbstractHttpConfigurer::disable)
-                // CORS 필터 적용
-                .addFilterBefore(corsFilter, SessionManagementFilter.class)
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults()) // 기본 CORS 설정
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .rememberMe(rememberMe -> rememberMe.disable())
+                .headers(headers -> headers.disable())
+                .formLogin(formLogin -> formLogin.disable())
+                .requestCache(requestCache -> requestCache.disable())
+                .logout(logout -> logout.disable())
+                .exceptionHandling(withDefaults())
 
-                // 예외 처리 핸들러 설정 (인증 실패 및 권한 부족 처리)
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling
-                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // 세션 관리 정책 설정 (JWT 사용하므로 세션을 stateless로 설정)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
-                // 인증 및 권한 관련 요청 처리
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/token", "/users/**", "/","/board/**").permitAll() // 로그인, 회원가입 관련 API는 인증 없이 접근 가능
@@ -57,24 +51,19 @@ public class WebOAuthSecurityConfig {
                                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
 
-                // OAuth2 설정 추가
-                .oauth2Login(oauth2 ->
-                        oauth2
-                                .loginPage("/")
-                                .userInfoEndpoint(userInfo ->
-                                        userInfo.userService(customOAuth2UserService)
-                                )
-                                .successHandler(oauthSuccessHandler)
-                )
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/users/logout")
-                                .deleteCookies("refresh_token")
-                                .logoutSuccessUrl("/")
-                );
 
-        // JWT 필터 추가
-        jwtSecurityConfig.configure(http);
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(auth -> auth
+                                .authorizationRequestRepository(oAuthAuthorizationRequestBasedOnCookieRepository)
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oauthSuccessHandler)
+                )
+
+                .addFilterAfter(jsonLoginProcessFilter, OAuth2LoginAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthorizationFilter, JsonLoginProcessFilter.class);
 
         return http.build();
     }
