@@ -1,6 +1,6 @@
 package com.example.carmanager.user.controller;
 
-import com.example.carmanager.config.jwt.TokenProvider;
+import com.example.carmanager.global.oauth2.util.TokenProvider;
 import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.service.UserService;
 import lombok.RequiredArgsConstructor;

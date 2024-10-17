@@ -1,6 +1,6 @@
 package com.example.carmanager.user.entity;
 
-import com.example.carmanager.config.oauth.OAuthProfile;
+import com.example.carmanager.global.oauth2.profile.OAuthProfile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

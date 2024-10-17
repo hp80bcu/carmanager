@@ -1,10 +1,8 @@
 package com.example.carmanager.user.controller;
 
-import com.example.carmanager.user.dto.UserJoinRequest;
-import com.example.carmanager.user.dto.UserJoinResponse;
 import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.service.UserService;
-import com.example.carmanager.util.Response;
+import com.example.carmanager.global.oauth2.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

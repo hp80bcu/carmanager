@@ -1,5 +1,6 @@
 package com.example.carmanager.user.entity;
 
+import com.example.carmanager.user.dto.JoinRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 @Table(name = "user")
-public class User implements UserDetails {
+public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +41,7 @@ public class User implements UserDetails {
     private String phone;
 
     @Column(name = "provider")
-    private String provider;
+    private static String provider;
 
     @UpdateTimestamp    // 현재시간 디폴트값
     @Column(name="createAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
@@ -54,47 +55,20 @@ public class User implements UserDetails {
         this.userId = userId;
     }
 
-    public User(String nickname, String email, Date birth, String adress, String phone, String provider) {
+    public User(String nickname, String email, Date birth, String adress, String phone) {
         this.nickname = nickname;
         this.email = email;
         this.birth = birth;
         this.adress = adress;
         this.phone = phone;
-        this.provider = provider;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public static User of(JoinRequest request) {
+        return new User(request.getPassword(), request.getNickname(), request.getBirth(), request.getAdress(), request.getPhone());
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+    public void update(String email, String name) {
+        this.email = email;
+        this.nickname = name;
     }
 }

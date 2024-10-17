@@ -12,13 +12,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long userId);
-
+    Optional<User> findUserByEmail(String email);
     List<User> findAll();
-
     User findAllByNickname(String nickname);
     User findByNicknameAndEmailAndProvider(String nickname, String email, String provider);
     User findIdByEmailAndProvider(String email, String provider);
-
     @Modifying
     @Query(value = "DELETE FROM User u WHERE u.userId = :userId", nativeQuery = true)
     void deleteById(Long userId);
