@@ -5,33 +5,28 @@ import java.util.Map;
 import java.util.function.Function;
 
 public enum OAuthAttributes {
-    GOOGLE("google", attributes -> new OAuthProfile(
-            attributes,
-            attributes.get("sub").toString(),
-            attributes.get("name").toString(),
-            attributes.get("email").toString()
-    )),
+    OOGLE("google", (attributes) -> {
+        return new OAuthProfile(
+                (String) attributes.get("name"),
+                (String) attributes.get("email")
+        );
+    }),
 
-
-    NAVER("naver", attributes -> {
+    NAVER("naver", (attributes) -> {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return new OAuthProfile(
-                response,
-                response.get("id").toString(),
-                response.get("name").toString(),
-                response.get("email").toString()
+                (String) response.get("name"),
+                (String) response.get("email")
         );
     }),
 
     KAKAO("kakao", (attributes) -> {
 
-        Map<String, Object> response = (Map<String, Object>) attributes.get("properties");
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         Map<String, String> account = (Map<String, String>) attributes.get("kakao_account");
 
         return new OAuthProfile(
-                attributes,
-                response.get("nickname").toString(),
-                response.get("name").toString(),
+                (String) properties.get("nickname"),
                 account.get("email")
         );
     });

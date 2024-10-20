@@ -26,7 +26,7 @@ public class CustomUser implements UserDetails, OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return oAuthProfile.getAttributes();
+        return null;
     }
 
     @Override
@@ -48,4 +48,6 @@ public class CustomUser implements UserDetails, OAuth2User {
     public String getUsername() {
         return oAuthProfile.getEmail();
     }
+
+    public Long getUserId() {return user.getUserId();}
 }

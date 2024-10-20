@@ -2,6 +2,7 @@ package com.example.carmanager.global.oauth2;
 
 import com.example.carmanager.global.oauth2.profile.OAuthAttributes;
 import com.example.carmanager.global.oauth2.profile.OAuthProfile;
+import com.example.carmanager.user.dto.JoinResponse;
 import com.example.carmanager.user.entity.CustomUser;
 import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.repository.UserRepository;
@@ -33,7 +34,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         OAuthProfile oAuthProfile = OAuthAttributes.extract(registrationId, oAuth2User.getAttributes());
+
         User user = saveUser(oAuthProfile, registrationId);
+
+        if(user == null){
+            User loginUser = userRepository.findByNicknameAndEmailAndProvider(oAuthProfile.getName(), oAuthProfile.getEmail(), registrationId);
+            loginUser.setPassword(null);
+            return new CustomUser(loginUser, oAuthProfile);
+        }
 
         return new CustomUser(user, oAuthProfile);
     }

@@ -5,7 +5,7 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/carmanager?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://localhost:3307/carmanager?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
     username: root
     password: suoh33004
   jpa:
@@ -24,7 +24,7 @@ spring:
         registration:
           google:
             client-id: 38260622745-g66hd91l9jtd50d75c8la882bs2k9c46.apps.googleusercontent.com
-            client-secret: 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
+            client-secret: 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
             redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope : email, profile
           naver :

@@ -53,6 +53,7 @@ public class WebOAuthSecurityConfig {
 
 
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/")
                         .authorizationEndpoint(auth -> auth
                                 .authorizationRequestRepository(oAuthAuthorizationRequestBasedOnCookieRepository)
                         )
