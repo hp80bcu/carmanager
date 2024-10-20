@@ -7,15 +7,15 @@ import "./Custom-Link.css";
 export default function Nav() {
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
         <Button
           variant="text"
           sx={{
-            m: 1,
+            m: 0,
             color: "black",
             display: { xs: 'none', sm: 'none', lg: 'block' },
           }}>
-          로그아웃
+          로그인
         </Button>
       </Box>
       <div className="h-container">
