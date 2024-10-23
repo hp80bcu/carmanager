@@ -39,13 +39,13 @@ export default function Nav() {
           </div>
         </div>
         <div className="item right">
-          <Link to={"/userinfomodify"} className="custom-link">내차량</Link>
+          <Link to={"/mycar"} className="custom-link">내차량</Link>
         </div>
         <div className="item right">
           <Link to={"/userinfomodify"} className="custom-link">내정보</Link>
         </div>
         <div className="item rightend">
-          <Link to={"/userinfomodify"} className="custom-link">찜목록</Link>
+          <Link to={"/bookmark"} className="custom-link">찜목록</Link>
         </div>
       </div>
     </>
