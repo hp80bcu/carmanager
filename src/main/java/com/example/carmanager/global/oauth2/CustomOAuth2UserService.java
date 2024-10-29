@@ -57,7 +57,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User check = userRepository.findByNicknameAndEmailAndProvider(oAuthProfile.getName(), oAuthProfile.getEmail(), registrationId);
 
         User user = null;
-        RefreshToken refreshToken = null;
         if (check == null) {
             user = new User();
             user.setPassword(password);
@@ -66,14 +65,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setProvider(registrationId);
 
             userRepository.save(user);
+
             Long userId = userRepository.findUserIdByEmailAndProvider(oAuthProfile.getEmail(), registrationId);
+
+            RefreshToken refreshToken = new RefreshToken();
             refreshToken.setUserId(userId);
-            String token = String.valueOf(tokenProvider.createToken(oAuthProfile.getEmail()));
+            TokenMapping tokens = tokenProvider.createToken(oAuthProfile.getEmail());
+
+            String token = tokens.getRefreshToken();
             refreshToken.setRefreshToken(token);
+            user.setRefreshToken(token);
 
             refreshTokenRepository.save(refreshToken);
         }
-
 
         return user;
     }

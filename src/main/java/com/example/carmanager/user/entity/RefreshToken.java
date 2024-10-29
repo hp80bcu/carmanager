@@ -3,7 +3,8 @@ package com.example.carmanager.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
 @Data
 @Entity
 public class RefreshToken {

@@ -51,6 +51,9 @@ public class User {
     @Column(name="modifiedAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
     private LocalDateTime modifiedAt;
 
+    @Transient
+    private String refreshToken;
+
     public User(Long userId) {
         this.userId = userId;
     }
@@ -62,6 +65,16 @@ public class User {
         this.adress = adress;
         this.phone = phone;
         this.password = password;
+    }
+
+    public User(String nickname, String email, Date birth, String adress, String phone, String password, String refreshToken) {
+        this.nickname = nickname;
+        this.email = email;
+        this.birth = birth;
+        this.adress = adress;
+        this.phone = phone;
+        this.password = password;
+        this.refreshToken = refreshToken;
     }
 
     public static User of(JoinRequest request) {

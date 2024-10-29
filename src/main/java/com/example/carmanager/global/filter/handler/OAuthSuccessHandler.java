@@ -35,6 +35,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final String REFRESH_TOKEN = "refreshToken";
 
     private final TokenProvider tokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final OAuthAuthorizationRequestBasedOnCookieRepository cookieAuthorizationRequestRepository;
 
     @Override
@@ -55,8 +56,13 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private TokenMapping saveUser(Authentication authentication) {
         CustomUser securityUser = (CustomUser) authentication.getPrincipal();
         String email = securityUser.getEmail();
+        Long id = securityUser.getUserId();
 
-        TokenMapping token = tokenProvider.createToken(email);
+
+        String refreshtoken = refreshTokenRepository.findRefreshTokenByUserId(id);
+
+        String accessToken = tokenProvider.createAccessToken(email);
+        TokenMapping token = new TokenMapping(accessToken, refreshtoken);
 
 
         return token;

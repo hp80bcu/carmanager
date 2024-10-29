@@ -55,4 +55,8 @@ public class CustomUser implements UserDetails, OAuth2User {
     public String getEmail() {
         return user.getEmail();
     }
+
+    public String getProvider(){return user.getProvider();}
+
+    public String getRefreshToken(){return user.getRefreshToken();}
 }
