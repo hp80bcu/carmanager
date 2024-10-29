@@ -1,10 +1,10 @@
 package com.example.carmanager.global.filter.handler;
 
 import com.example.carmanager.global.OAuthAuthorizationRequestBasedOnCookieRepository;
-import com.example.carmanager.global.oauth2.model.SecurityUser;
 import com.example.carmanager.global.oauth2.model.TokenMapping;
 import com.example.carmanager.global.oauth2.util.CookieUtil;
 import com.example.carmanager.global.oauth2.util.TokenProvider;
+import com.example.carmanager.user.entity.CustomUser;
 import com.example.carmanager.user.repository.RefreshTokenRepository;
 import com.example.carmanager.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -49,14 +49,15 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         clearAuthenticationAttributes(request, response);
-        return redirectUri.orElse(getDefaultTargetUrl());
+        return redirectUri.orElse("/");
     }
 
     private TokenMapping saveUser(Authentication authentication) {
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        CustomUser securityUser = (CustomUser) authentication.getPrincipal();
         String email = securityUser.getEmail();
 
         TokenMapping token = tokenProvider.createToken(email);
+
 
         return token;
     }

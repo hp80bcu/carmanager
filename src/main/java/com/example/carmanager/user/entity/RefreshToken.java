@@ -1,13 +1,10 @@
 package com.example.carmanager.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
 @Entity
 public class RefreshToken {
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class CustomUser implements UserDetails, OAuth2User {
@@ -36,7 +37,7 @@ public class CustomUser implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(() -> "ROLE_USER");
     }
 
     @Override
@@ -50,4 +51,8 @@ public class CustomUser implements UserDetails, OAuth2User {
     }
 
     public Long getUserId() {return user.getUserId();}
+
+    public String getEmail() {
+        return user.getEmail();
+    }
 }

@@ -2,7 +2,6 @@ package com.example.carmanager.user.controller;
 
 import com.example.carmanager.global.oauth2.util.AuthenticationLogger;
 import com.example.carmanager.global.oauth2.util.TokenProvider;
-import com.example.carmanager.user.entity.CustomUser;
 import com.example.carmanager.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ public class MainController {
 
     @GetMapping("/")
     public String Main(Authentication authentication) {
-        authenticationLogger.logAuthenticationDetails(authentication);
-        return "main";  // 인증되지 않은 경우에도 메인 페이지로
+         authenticationLogger.logAuthenticationDetails(authentication);
+         return "main";  // 인증되지 않은 경우에도 메인 페이지로
     }
 }

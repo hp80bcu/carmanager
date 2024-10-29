@@ -1,7 +1,7 @@
 package com.example.carmanager.global.filter;
 
 import com.example.carmanager.global.oauth2.util.TokenProvider;
-import com.example.carmanager.global.oauth2.model.SecurityUser;
+import com.example.carmanager.user.entity.CustomUser;
 import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.repository.RefreshTokenRepository;
 import com.example.carmanager.user.repository.UserRepository;
@@ -11,14 +11,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Component
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -47,7 +51,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private void saveAuthentication(String accessToken) {
         String email = tokenProvider.extractUserEmail(accessToken);
-        SecurityUser securityUser = new SecurityUser(userRepository.findUserByEmail(email).get());
+        CustomUser securityUser = new CustomUser(userRepository.findUserByEmail(email).get());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

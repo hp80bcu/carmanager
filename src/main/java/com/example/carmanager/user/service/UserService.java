@@ -1,7 +1,7 @@
 package com.example.carmanager.user.service;
 
-import com.example.carmanager.global.oauth2.model.SecurityUser;
 import com.example.carmanager.user.dto.JoinRequest;
+import com.example.carmanager.user.entity.CustomUser;
 import com.example.carmanager.user.entity.User;
 import com.example.carmanager.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(username).get();
-        return new SecurityUser(user);
+        return new CustomUser(user);
     }
 
     public User saveUSer(JoinRequest request) {

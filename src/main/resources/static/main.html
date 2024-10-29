@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta https-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+<th:block th:if="${session.name != null}">
+    <p th:text="${session.name}"></p>님 환영합니다!
+</th:block>
+<button th:if="${session.name == null}" type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/login'">로그인</button>
+<button th:if="${session.name == null}" type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/join'">회원가입</button>
+<button th:if="${session.name != null}" type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/profile'">회원정보 조회</button>
+<button th:if="${session.name != null}" type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/logout'">로그아웃</button>
+</body>
+</html>

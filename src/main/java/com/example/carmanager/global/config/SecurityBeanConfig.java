@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +32,7 @@ public class SecurityBeanConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:5500"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:8080"));
         configuration.setAllowedMethods(List.of("HEAD","POST","GET","DELETE","PUT", "OPTIONS"));
         configuration.addAllowedHeader("*");
         configuration.setExposedHeaders(List.of(accessHeader, refreshHeader));
@@ -41,17 +42,12 @@ public class SecurityBeanConfig {
         return source;
     }
 
-    /*@Bean
+    @Bean
     public AuthenticationManager authenticationManager(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(userService());
         return new ProviderManager(provider);
-    }*/
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
     }
 
     @Bean

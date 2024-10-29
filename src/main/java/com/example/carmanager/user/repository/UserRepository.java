@@ -4,6 +4,7 @@ import com.example.carmanager.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(Long userId);
     User findAllByNickname(String nickname);
     User findByNicknameAndEmailAndProvider(String nickname, String email, String provider);
-    User findIdByEmailAndProvider(String email, String provider);
+    @Query("SELECT u.userId FROM User u WHERE u.email = :email AND u.provider = :provider")
+    Long findUserIdByEmailAndProvider(@Param("email") String email, @Param("provider") String provider);
     @Modifying
     @Query(value = "DELETE FROM User u WHERE u.userId = :userId", nativeQuery = true)
     void deleteById(Long userId);
