@@ -5,6 +5,7 @@ import SearchPage from "./routes/SearchPage";
 import Purchase from "./routes/Purchase";
 import Sale from "./routes/Sale";
 import UserInfoModify from "./routes/UserInfoModify";
+import Login from "./routes/Login";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/sale" element={<Sale />} />
           <Route path="/userinfomodify" element={<UserInfoModify />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
       
