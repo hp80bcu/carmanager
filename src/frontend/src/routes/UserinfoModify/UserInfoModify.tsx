@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // import { Box } from "@mui/material";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 // import { Button } from "@mui/material";
 import "./UserInfoModify.css";
 

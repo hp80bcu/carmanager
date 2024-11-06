@@ -1,6 +1,6 @@
 import React from 'react';
 import './LoginStyles.css';
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 const Login = () => {
   return (
