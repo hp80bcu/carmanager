@@ -34,11 +34,35 @@
 }
 
 .modelsearchAreaLine {
-  flex-direction: column;
+  margin-top: 7px;
+  flex-direction:column;
   display: flex;
   width: 800px;
   height: 200px;
   /* background-color: aqua; */
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #000000;
+  /* border-radius: 5px; */
+}
+
+.modelsearch1column{
+  align-self: center;
+}
+
+.modelsearch1column select{
+  width: 100px;
+  align-self: center;
+}
+
+.button-container{
+    width: 120px;
+    height: 40px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: #26CFAE;
+    color: white;
+    align-self: center;
+    align-items: center;
+    border: 0px;
+    font-weight: bold;
 }
