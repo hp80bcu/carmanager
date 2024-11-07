@@ -52,9 +52,9 @@ public class CarBasic {
 //    @JoinColumn(name = "carinfo1_id")
 //    private CarInfo1 carInfo1;
 //
-//    @ManyToOne
-//    @JoinColumn(name = "carinfo2_id")
-//    private CarInfo2 carInfo2;
+    @ManyToOne
+    @JoinColumn(name = "carinfo2_id")
+    private CarInfo2 carInfo2;
 //
 //    @ManyToOne
 //    @JoinColumn(name = "maintance_id")
