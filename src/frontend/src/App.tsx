@@ -4,8 +4,10 @@ import Home from "./routes/Home";
 import SearchPage from "./routes/SearchPage";
 import Purchase from "./routes/Purchase";
 import Sale from "./routes/Sale";
-import UserInfoModify from "./routes/UserInfoModify";
-import Login from "./routes/Login";
+import UserInfoModify from "./routes/users/UserInfoModify";
+import Login from "./routes/users/login";
+import LoginRedirect from  "./routes/users/LoginRedirect";
+
 
 function App() {
   return (
@@ -16,13 +18,18 @@ function App() {
           <Route path="/searchpage" element={<SearchPage />} />
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/sale" element={<Sale />} />
-          <Route path="/userinfomodify" element={<UserInfoModify />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/users/userinfomodify" element={<UserInfoModify />} />
+          <Route path="/users/login" element={<Login />} />
+          <Route path="/login/redirect" element={<LoginRedirect />} />
         </Routes>
       </Router>
       
     </>
   );
 }
+
+
+
+
 
 export default App;

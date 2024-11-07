@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private static final String TOKEN = "token";
     private static final String REFRESH_TOKEN = "refreshToken";
+    private static final String REDIRECT_URL = "http://localhost:3000/login/redirect";
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -43,6 +45,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, response, authentication);
         TokenMapping tokenMapping = saveUser(authentication);
+
         getRedirectStrategy().sendRedirect(request, response, getRedirectUrl(targetUrl, tokenMapping));
     }
 
@@ -69,7 +72,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     }
 
     private String getRedirectUrl(String targetUrl, TokenMapping token) {
-        return UriComponentsBuilder.fromUriString(targetUrl)
+        return UriComponentsBuilder.fromUriString(REDIRECT_URL)
                 .queryParam(TOKEN, token.getAccessToken())
                 .queryParam(REFRESH_TOKEN, token.getRefreshToken())
                 .build().toUriString();

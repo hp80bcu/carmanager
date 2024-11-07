@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-@Table(name = "carbasic")
+@Table(name = "carinfo1")
 public class CarInfo1 {
     @Id
     @Column(name = "carinfo1")

@@ -55,9 +55,8 @@ public class WebOAuthSecurityConfig {
 
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers( "/users/**", "/", "/board/**").permitAll() // 인증 없이 접근 가능 경로
+                                .requestMatchers( "/users/**", "/", "/board/**", "/cars/**").permitAll() // 인증 없이 접근 가능 경로
                                 .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-                                .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
 
 

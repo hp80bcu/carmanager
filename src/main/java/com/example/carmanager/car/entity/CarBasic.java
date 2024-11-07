@@ -30,32 +30,41 @@ public class CarBasic {
     @Column(name = "model_name")
     private String modelName;
 
-    @Column(name = "carType")
+    @Column(name = "model_detail")
+    private String modelDetail;
+
+    @Column(name = "fuel")
+    private String fuel;
+
+    @Column(name = "car_type")
     private String carType;
 
-    @Column(name = "modelYear")
+    @Column(name = "model_year")
     private Date modelYear;
 
     @Column(name = "distance")
     private Integer distance;
 
-    @ManyToOne
-    @JoinColumn(name = "carinfo1_id")
-    private CarInfo1 carInfo1;
+    @Column(name = "isChecked")
+    private Integer isChecked;
 
-    @ManyToOne
-    @JoinColumn(name = "carinfo2_id")
-    private CarInfo2 carInfo2;
-
-    @ManyToOne
-    @JoinColumn(name = "maintance_id")
-    private Maintance maintance;
-
-    @ManyToOne
-    @JoinColumn(name = "file_id")
-    private CarImage carImage;
-
-    @ManyToOne
-    @JoinColumn(name = "option_id")
-    private Option option;
+//    @ManyToOne
+//    @JoinColumn(name = "carinfo1_id")
+//    private CarInfo1 carInfo1;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "carinfo2_id")
+//    private CarInfo2 carInfo2;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "maintance_id")
+//    private Maintance maintance;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "file_id")
+//    private CarImage carImage;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "option_id")
+//    private Option option;
 }
