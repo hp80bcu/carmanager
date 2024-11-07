@@ -8,7 +8,7 @@ import {
   MenuItem,
   styled
 } from "@mui/material";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 import "./Home.css";
 
 export default function Home() {

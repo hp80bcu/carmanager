@@ -16,7 +16,9 @@ export default function Nav() {
             display: { xs: "none", sm: "none", lg: "block" },
           }}
         >
-          로그인
+          <Link to={"/login"}>
+            로그인
+          </Link>
         </Button>
       </Box>
       <div className="h-container">
