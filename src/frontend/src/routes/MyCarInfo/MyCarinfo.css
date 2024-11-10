@@ -1,0 +1,42 @@
+body{
+  margin-left: 0;
+}
+
+.my-car-container {
+  text-align: left;
+  padding: 20px;
+  padding-top: 30px;
+  background-color: #EEFFEE;
+  height: 11.5rem;
+  width: 100vw;
+}
+
+.my-car-container p{
+  margin-left: 2rem;
+}
+
+.my-car-container button{
+  margin-left: 2rem;
+  margin-top: 3rem;
+  width: 7.5rem;
+  height: 2rem;
+  padding: 0.313rem;
+}
+
+.add-car-button {
+  background-color: #07C8A3; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+h2{
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
