@@ -54,6 +54,10 @@ test {
 	useJUnitPlatform()
 }
 
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
+}
+
 
 //def frontendDir = "$projectDir/src/frontend"
 //
