@@ -14,10 +14,10 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-@Table(name = "option_kind")
+@Table(name = "maintance")
 public class Maintance {
     @Id
-    @Column(name = "maintanceId")
+    @Column(name = "maintance_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long maintanceId;
 
@@ -33,6 +33,7 @@ public class Maintance {
     @Column(name = "content")
     private String content;
 
-//    @OneToMany(mappedBy = "carbasic")
-//    private List<CarBasic> carBasics = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private CarBasic carBasic;
 }

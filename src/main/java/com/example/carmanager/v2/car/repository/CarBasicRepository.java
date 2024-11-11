@@ -22,4 +22,7 @@ public interface CarBasicRepository extends JpaRepository<CarBasic, Long> {
 
     @Query("SELECT c FROM CarBasic c WHERE c.user.userId = :userId AND c.isChecked = 1")
     List<CarBasic> findAllByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT c.carNumber FROM CarBasic c WHERE c.carId = :carId")
+    String findCarNumByCarId(@Param("carId") Long carId);
 }

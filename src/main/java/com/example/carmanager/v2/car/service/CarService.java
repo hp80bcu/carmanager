@@ -1,12 +1,12 @@
 package com.example.carmanager.v2.car.service;
 
 
-import com.example.carmanager.v2.car.dto.CarAddRequestDto;
-import com.example.carmanager.v2.car.dto.CarAddResponseDto;
-import com.example.carmanager.v2.car.dto.MyCarBasicResponseDto;
+import com.example.carmanager.v2.car.dto.*;
 import com.example.carmanager.v2.car.entity.CarBasic;
 import com.example.carmanager.v2.car.entity.CarInfo2;
+import com.example.carmanager.v2.car.entity.Maintance;
 import com.example.carmanager.v2.car.repository.CarBasicRepository;
+import com.example.carmanager.v2.car.repository.MaintanceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import java.util.List;
 @Transactional
 public class CarService {
     private final CarBasicRepository carBasicRepository;
+    private final MaintanceRepository maintanceRepository;
 
     /**
      * 차량 추가
@@ -44,6 +45,10 @@ public class CarService {
         return carAddResponseDto;
     }
 
+    /**
+     * 내 차량 정보 모두 조회
+     * @return
+     */
     public List<MyCarBasicResponseDto> getMyCar() {
         Long userId = 1L;
         List<CarBasic> carBasicList = carBasicRepository.findAllByUserId(userId);
@@ -72,6 +77,26 @@ public class CarService {
             }
 
             responseDtoList.add(dto);
+        }
+
+        return responseDtoList;
+    }
+
+    public List<CarMaintanceResponseDto> getMyCarMaintance(Long carId){
+        List<Maintance> maintanceList = maintanceRepository.findAllMaintanceByCarId(carId);
+        String carNum = carBasicRepository.findCarNumByCarId(carId);
+
+        List<CarMaintanceResponseDto> responseDtoList = new ArrayList<>();
+
+        for (Maintance maintance : maintanceList) {
+            CarMaintanceResponseDto carMaintanceResponsedto = new CarMaintanceResponseDto();
+            carMaintanceResponsedto.setCarNum(carNum);
+            carMaintanceResponsedto.setMaintanceDate(maintance.getMaintanceDate());
+            carMaintanceResponsedto.setMaintanceCompany(maintance.getMaintanceCompany());
+            carMaintanceResponsedto.setPerformanceCheckDistance(maintance.getPerformanceCheckDistance());
+            carMaintanceResponsedto.setContent(maintance.getContent());
+
+            responseDtoList.add(carMaintanceResponsedto);
         }
 
         return responseDtoList;

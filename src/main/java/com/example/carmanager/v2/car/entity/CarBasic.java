@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,6 +57,9 @@ public class CarBasic {
     @ManyToOne
     @JoinColumn(name = "carinfo2_id")
     private CarInfo2 carInfo2;
+
+    @OneToMany(mappedBy = "carBasic")
+    private List<Maintance> maintance = new ArrayList<>();
 //
 //    @ManyToOne
 //    @JoinColumn(name = "maintance_id")

@@ -7,7 +7,7 @@ const Login = () => {
         window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
         };
 
-  return (
+  return (  
     <>
       <Nav />
       <div className="login-container">
