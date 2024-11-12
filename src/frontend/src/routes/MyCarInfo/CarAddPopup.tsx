@@ -1,21 +1,13 @@
 import React, { useState } from "react";
-import {
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  InputAdornment,
-} from "@mui/material";
-import "./CarAddPopup.css";
+import { Button, TextField, Modal, Box, InputAdornment } from "@mui/material";
 
 interface CarAddPopupProps {
   onClose: () => void;
+  onOpenNext: () => void;
 }
 
-const CarAddPopup: React.FC<CarAddPopupProps> = ({ onClose }) => {
-  const [carNumber, setCarNumber] = useState<string>("");
+const CarAddPopup: React.FC<CarAddPopupProps> = ({ onClose, onOpenNext}) => {
+  const [carNumber, setCarNumber] = useState<string>(""); 
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCarNumber(event.target.value);
@@ -30,62 +22,138 @@ const CarAddPopup: React.FC<CarAddPopupProps> = ({ onClose }) => {
   const handleSubmit = () => {
     // 차량 정보 서버 전송 로직 (예시)
     console.log("차량 번호:", carNumber);
-    onClose(); // 팝업 닫기
+    onOpenNext(); // 두 번째 팝업 열기
   };
-
   return (
-    <Dialog
+    <>
+    <Modal
       open={true}
       onClose={onClose}
-      PaperProps={{
-        style: {
+      aria-labelledby="car-modal-title"
+      aria-describedby="car-modal-description"
+    >
+      <Box
+        sx={{
           position: "absolute",
-          top: "30%",
+          top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          maxWidth: "100rem",
-          maxHeight: "400rem",
-        },
-      }}
-    >
-      <DialogTitle style={{alignSelf:"center", marginTop:"3rem"}}>차량번호 입력</DialogTitle>
-      <DialogContent>
+          width: 350,
+          height: "auto",
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <h2
+          id="car-modal-title"
+          style={{ marginRight: "1.2rem", marginTop: "3rem" }}
+        >
+          차량번호 입력
+        </h2>
+        <p style={{ fontWeight: "bold", marginTop: "0.5rem" }}>
+          등록할 차량 번호를 입력해주세요.
+        </p>
         <TextField
           autoFocus
           margin="dense"
           id="carNumber"
-          label="차량번호"
           type="text"
-          fullWidth
           value={carNumber}
           onChange={handleInputChange}
+          placeholder="123가4567"
           className="custom-textfield"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <img
-                  src={"Image/search.png"}
-                  alt="검색"
-                  width="20"
-                  height="20"
+                <Box
+                  sx={{
+                    backgroundColor: "#009688", 
+                    borderRadius: "0 4px 4px 0",
+                    padding: "13px",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
                   onClick={handleSearch}
-                />
+                >
+                  <img src="/Image/search.png" height="30" alt="검색"></img>
+                </Box>
               </InputAdornment>
             ),
+            style: {
+              paddingRight: 0,
+            },
           }}
         />
-        <p style={{alignSelf:"center",fontSize:"10px", fontWeight:"bold"}}>
-          월말에 차량 등록 시 차량번호 확인 서비스 이용에 <br></br> <td></td> 제한이 있을 수
+        <Box
+          sx={{
+            width: "78%",
+            height: "1px",
+            backgroundColor: "#D9D9D9",
+            marginTop: "3.5rem",
+          }}
+        />
+        <p
+          style={{
+            fontSize: "13px",
+            textAlign: "center",
+            margin: "2rem 4px 10px 4px",
+
+            fontWeight: "bolder",
+          }}
+        >
+          월말에 차량 등록 시 차량번호 확인 서비스 이용에 제한이 있을 수
           있습니다.
         </p>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>취소</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
-          추가
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            marginTop: "1rem",
+          }}
+        >
+          <Button
+            onClick={onClose}
+            sx={{
+              height: "50px",
+              fontSize: "1rem", 
+              flex: 1,
+              backgroundColor: "#00BFA5",
+              color: "#FFFFFF",
+              fontWeight: "bold",
+              borderRadius: "0px",
+              "&:hover": {
+                backgroundColor: "#009688", 
+              },
+            }}
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            sx={{
+              height: "50px", 
+              fontSize: "1rem", 
+              flex: 1,
+              backgroundColor: "#00BFA5",
+              color: "#FFFFFF",
+              fontWeight: "bold",
+              borderRadius: "0px", 
+              "&:hover": {
+                backgroundColor: "#009688", 
+              },
+            }}
+          >
+            추가
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
+    </>
   );
 };
 

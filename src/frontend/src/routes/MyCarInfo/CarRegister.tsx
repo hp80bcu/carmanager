@@ -4,9 +4,9 @@ import Nav from "../../components/Nav";
 import CarAddPopup from "./CarAddPopup";
 import CarAddPopup_1 from "./CarAddPopup_1";
 import CarAddPopup_2 from "./CarAddPopup_2";
-import "./MyCarinfo.css";
+import "./CarRegister.css";
 
-const MyCarInfo: React.FC = () => {
+const CarRegister: React.FC = () => {
   const [isFirstPopupOpen, setIsFirstPopupOpen] = useState(false);
   const [isSecondPopupOpen, setIsSecondPopupOpen] = useState(false);
   const [isThirdPopupOpen, setIsThirdPopupOpen] = useState(false);
@@ -29,18 +29,11 @@ const MyCarInfo: React.FC = () => {
   return (
     <>
       <Nav />
-      <h2>내 차 관리</h2>
-      <div className="my-car-container">
-        <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-          내 차 관리는 차매니저에서!
-        </p>
-        <p style={{ color: "#7A7A7A" }}>
-          차량을 추가하시면 다양한 정보를 한 눈에 볼 수 있습니다.
-        </p>
-        <button className="add-car-button" onClick={handleOpenFirstPopup}>
+      <div className="container">
+        <button className="add-car-button" onClick={handleOpenFirstPopup} style={{alignSelf:"start", marginLeft:"1rem"}}>
           차량 추가
         </button>
-      </div>
+        </div>
       {isFirstPopupOpen && (
         <CarAddPopup
           onClose={handleCloseFirstPopup}
@@ -66,4 +59,4 @@ const MyCarInfo: React.FC = () => {
   );
 };
 
-export default MyCarInfo;
+export default CarRegister;
