@@ -36,6 +36,10 @@ body{
   cursor: pointer;
 }
 
+.add-car-button:hover {
+  color: black;
+}
+
 h2{
   margin-top: 2rem;
   margin-left: 2rem;

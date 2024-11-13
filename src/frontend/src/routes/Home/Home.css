@@ -42,3 +42,17 @@
   border: 1px solid #ddd;
   border-radius: 0.313rem; /* 5px */
 }
+
+.button-container{
+  background-color: #26CFAE;
+  color: white;
+  border: none;
+  border-radius: 0.188rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.button-container:hover {
+  color: black;
+}

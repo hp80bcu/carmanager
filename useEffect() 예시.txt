@@ -1,0 +1,21 @@
+useEffect(() => {
+    const fetchUserInfo = async () => {
+      const accessToken = getCookie('Authorization');
+      console.log("액세스 토큰: " + accessToken);
+
+      if (accessToken) {
+        try {
+          const response = await axios.get('/users/userinfo', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          setUsername(response.data.username); // 사용자 이름 설정
+          setUserId(response.data.userId);
+
+          console.log("Fetched User ID:", response.data.userId); // User ID 확인용 로그
+        } catch (error) {
+          console.error('Failed to fetch user info:', error);
+        }
+      }
+    };

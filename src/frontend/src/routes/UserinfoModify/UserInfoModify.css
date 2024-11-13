@@ -7,16 +7,16 @@
 .user-info-edit {
   flex-direction: column;
   display: flex;
-  width: 56.25rem; /* 900px */
-  margin: 0.625rem auto; /* 10px */
-  margin-top: 1.25rem; /* 20px */
+  width: 56.25rem;
+  margin: 0.625rem auto;
+  margin-top: 1.25rem;
   border: 1px solid #ddd;
-  border-radius: 0.313rem; /* 5px */
+  border-radius: 0.313rem;
 }
 
 .user-info-edit h3 {
   text-align: center;
-  margin-bottom: 1.875rem; /* 30px */
+  margin-bottom: 1.875rem;
 }
 
 .user-info-edit form {
@@ -25,64 +25,66 @@
 }
 
 .user-info-edit label {
-  width: 6.25rem; /* 100px */
+  width: 6.25rem;
   display: inline-block;
-  margin-bottom: 0.313rem; /* 5px */
-  margin-left: 9.375rem; /* 150px */
+  margin-bottom: 0.313rem; 
+  margin-left: 9.375rem; 
   font-weight: bold;
 }
 
 .user-info-edit input {
-  padding: 0.625rem; /* 10px */
-  margin-bottom: 0.625rem; /* 10px */
-  margin-left: 6.25rem; /* 100px */
+  padding: 0.625rem;
+  margin-bottom: 0.625rem;
+  margin-left: 6.25rem; 
   border: 1px solid #ddd;
-  border-radius: 0.188rem; /* 3px */
+  border-radius: 0.188rem; 
 }
 
-.user-info-edit button {
-  width: 7.5rem; /* 120px */
-  height: 2.5rem; /* 40px */
-  padding: 0.313rem; /* 5px */
-  margin-top: 0.625rem; /* 10px */
-  margin-bottom: 1.25rem; /* 20px */
+ .user-info-edit button {
+  width: 7.5rem;
+  height: 2.5rem;
+  padding: 0.313rem; 
+  margin-top: 0.625rem; 
+  margin-bottom: 1.25rem; 
   background-color: #26CFAE;
   color: white;
   border: none;
-  border-radius: 0.188rem; /* 3px */
+  border-radius: 0.188rem;
   cursor: pointer;
   font-weight: bold;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
 }
+
 
 .user-info-edit button:hover {
   color: black;
 }
 
 .button-container {
-  display: flex;
+  display: inline-flex;
+  background-color: #ffff;
   justify-content: space-evenly;
-  margin-top: 1.25rem; /* 20px */
+  margin-top: 1.25rem;
 }
 
 .button-container2 {
   flex-direction: column;
   display: flex;
-  width: 56.25rem; /* 900px */
+  width: 56.25rem;
   align-content: start;
-  margin-top: 1.25rem; /* 20px */
-  margin: 0.625rem auto; /* 10px */
+  margin-top: 1.25rem;
+  margin: 0.625rem auto;
 }
 
 .delete-button {
-  width: 7.5rem; /* 120px */
-  height: 2.5rem; /* 40px */
-  padding: 0.313rem; /* 5px */
+  width: 7.5rem;
+  height: 2.5rem;
+  padding: 0.313rem;
   background-color: #C80707;
   color: white;
   border: none;
   font-weight: bold;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   cursor: pointer;
 }
 

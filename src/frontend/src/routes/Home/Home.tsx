@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
-  Container,
-  TextField,
-  Button,
-  Select,
+  InputLabel,
+  FormHelperText,
+  FormControl,
   MenuItem,
-  styled
+  styled,
 } from "@mui/material";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Nav from "../../components/Nav";
 import "./Home.css";
 
@@ -25,14 +24,14 @@ export default function Home() {
     // 여기에 실제 검색 로직 구현
   };
 
-  const Container = styled('div')({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '0px',
-    marginTop: '50px',
-    marginBottom: '20px',
-    marginLeft: '50px',
-    marginRight: '50px'
+  const Container = styled("div")({
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "0px",
+    marginTop: "50px",
+    marginBottom: "20px",
+    marginLeft: "50px",
+    marginRight: "50px",
   });
 
   return (
@@ -48,41 +47,61 @@ export default function Home() {
           <text>모델 검색</text>
           <div className="modelsearchAreaLine">
             <Container>
-              <Select
-                label="제조사"
-                value={manufacturer}
-                onChange={(e) => setManufacturer(e.target.value)}
-              >
-                {manufacturers.map((manufacturer) => (
-                  <MenuItem key={manufacturer} value={manufacturer}>
-                    {manufacturer}
-                  </MenuItem>
-                ))}
-              </Select>
-              <Select
-                label="모델명"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-              >
-                {models.map((model) => (
-                  <MenuItem key={model} value={model}>
-                    {model}
-                  </MenuItem>
-                ))}
-              </Select>
-              <Select
-                label="세부모델"
-                value={detailModel}
-                onChange={(e) => setDetailModel(e.target.value)}
-              >
-                {detailModels.map((detailModel) => (
-                  <MenuItem key={detailModel} value={detailModel}>
-                    {detailModel}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <InputLabel id="manufacturers">제조사</InputLabel>
+                <Select
+                  labelId="manufacturers"
+                  id="manufacturers"
+                  label="제조사"
+                  value={ manufacturer }
+                  
+                  onChange={(e) => setManufacturer(e.target.value as string)}
+                >
+                  {manufacturers.map((manufacturer) => (
+                    <MenuItem key={manufacturer} value={manufacturer}>
+                      {manufacturer}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <InputLabel id="models">모델명</InputLabel>
+                <Select
+                  labelId="models"
+                  id="models"
+                  value={model}
+                  label="모델명"
+                  onChange={(e) => setModel(e.target.value as string)}
+                >
+                  {models.map((model) => (
+                    <MenuItem key={model} value={model}>
+                      {model}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <InputLabel id="manufacturers">세부모델</InputLabel>
+                <Select
+                  labelId="detailModel"
+                  id="detailModel"
+                  value={detailModel}
+                  label="세부모델"
+                  onChange={(e) => setDetailModel(e.target.value as string)}
+                >
+                  {detailModels.map((detailModel) => (
+                    <MenuItem key={detailModel} value={detailModel}>
+                      {detailModel}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Container>
-            <button type="button" className="button-container" onClick={handleSearch}>
+            <button
+              type="button"
+              className="button-container"
+              onClick={handleSearch}
+            >
               검색
             </button>
           </div>

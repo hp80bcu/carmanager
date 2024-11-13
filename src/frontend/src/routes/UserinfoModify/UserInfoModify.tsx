@@ -32,7 +32,15 @@ const UserInfoModify: React.FC = () => {
     // 여기에 취소 기능 구현
     console.log("취소 버튼 클릭됨!");
     // 예시: 
-    // - 회원 탈퇴 확인 다이얼로그 띄우기
+    // - 백엔드 서버로 회원 탈퇴 요청 보내기 (API 호출)
+    // - 사용자 세션 및 데이터 삭제
+    // - 로그인 페이지로 이동
+  }
+
+  const handleChangeButtonClick = () => {
+    // 여기에 저장 기능 구현
+    console.log("취소 버튼 클릭됨!");
+    // 예시: 
     // - 백엔드 서버로 회원 탈퇴 요청 보내기 (API 호출)
     // - 사용자 세션 및 데이터 삭제
     // - 로그인 페이지로 이동
@@ -93,7 +101,7 @@ const UserInfoModify: React.FC = () => {
             </div>
             <div className="button-container">
               <button type="button" onClick={handleCancleButtonClick}>취소</button>
-              <button type="submit">저장</button>
+              <button type="submit"onClick={handleChangeButtonClick}>저장</button>
             </div>
           </form>
         </div>

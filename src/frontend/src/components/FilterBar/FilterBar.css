@@ -1,0 +1,10 @@
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-item {
+    /* 각 필터 항목의 스타일 */
+  }
