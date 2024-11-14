@@ -32,7 +32,7 @@ const SearchPage = () => {
     <>
       <SideNav />
       <SearchBar placeholder={`현재 ${totalCars.toLocaleString()} 대의 차량이 등록되어 있습니다!`} onSearch={handleSearch} />
-      <CarList cars={searchResults} />
+      {/* <CarList cars={searchResults} /> */}
     </>
   );
 };
