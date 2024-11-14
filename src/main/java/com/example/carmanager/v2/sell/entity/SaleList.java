@@ -19,6 +19,12 @@ public class SaleList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long saleListId;
 
+    @Column(name = "car_id")
+    private Long carId;
+
+    @Column(name = "options")
+    private String options;
+
     @Column(name = "car_description")
     private String carDescription;
 

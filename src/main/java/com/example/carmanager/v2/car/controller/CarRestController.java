@@ -2,7 +2,7 @@ package com.example.carmanager.v2.car.controller;
 
 import com.example.carmanager.v2.car.dto.*;
 import com.example.carmanager.v2.car.service.CarService;
-import com.example.carmanager.v2.jwt.prop.Response;
+import com.example.carmanager.v2.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

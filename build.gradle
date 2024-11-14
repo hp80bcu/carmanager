@@ -38,6 +38,7 @@ dependencies {
 	// 기타 의존성
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation("com.amazonaws:aws-java-sdk-s3:1.12.174")
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testAnnotationProcessor('org.projectlombok:lombok')

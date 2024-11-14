@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class CarImage {
     @Column(name = "file_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
+
+    @Column(name = "car_id")
+    private Long carId;
 
     @Column(name = "file")
     private String file;

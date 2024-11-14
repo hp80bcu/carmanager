@@ -26,6 +26,6 @@ public class Option {
     @Column(name = "option_name")
     private String optionName;
 
-//    @OneToMany(mappedBy = "carbasic")
-//    private List<CarBasic> carBasics = new ArrayList<>();
+    @Column(name = "car_id")
+    private Long carId;
 }

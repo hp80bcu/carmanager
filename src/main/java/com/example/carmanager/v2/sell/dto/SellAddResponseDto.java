@@ -6,5 +6,4 @@ import lombok.Data;
 public class SellAddResponseDto {
     Long saleListId;
     Long carId;
-    String carNumber;
 }

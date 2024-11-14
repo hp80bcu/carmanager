@@ -1,10 +1,11 @@
 package com.example.carmanager.v2.sell.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SellAddRequestDto {
-    Long userId;
+    Long carId;
     String carNumber;
     String[] outerOptions;
     String[] innerOptions;
@@ -13,6 +14,5 @@ public class SellAddRequestDto {
     int distance;
     int price;
     String description;
-    String[] innerPictures;
-    String[] outerPictures;
+    MultipartFile[] Pictures;
 }
