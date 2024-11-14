@@ -11,6 +11,6 @@ public class ReactTestController {
 
     @GetMapping("/api/test")
     public String getCurrentTime() {
-        return "시발";
+        return "테스트";
     }
 }
