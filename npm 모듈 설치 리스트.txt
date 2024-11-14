@@ -6,3 +6,5 @@ npm install @mui/material @emotion/react @emotion/styled
 
 npm install express jsonwebtoken bcryptjs  ->jwt패키지
 npm install --save-dev @types/express @types/jsonwebtoken @types/bcryptjs  ->jwt패키지
+
+npm install @mui/icons-material

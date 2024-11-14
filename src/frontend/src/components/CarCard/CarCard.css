@@ -1,13 +1,27 @@
 .car-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    text-align: center;
-  }
-  
-  .car-card img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  width: 200px;
+  margin: 10px;
+}
+.car-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.car-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+.car-card p {
+  margin: 5px 0;
+}
+
+/* CarList.css */
+.car-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
