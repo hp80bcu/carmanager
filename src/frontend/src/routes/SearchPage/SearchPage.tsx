@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import SideNav from "../../components/SideNav";
 import SearchBar from "../../components/Searchbar/Searchbar";
-import CarList from "../../components/CarItem/CarList";
+import CarList from "../cars/CarItem/CarList";
 import { Car, SearchResult } from "../../components/Car";
 // import carsData from '../../components/cars.json'; // 예시 데이터
 
