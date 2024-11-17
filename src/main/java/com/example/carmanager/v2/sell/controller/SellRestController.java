@@ -22,9 +22,9 @@ import java.util.List;
 @Slf4j
 public class SellRestController {
     private final SaleListService saleListService;
-    @PostMapping("/add-images")
-    public Response<SellAddResponseDto> addCar(@RequestPart(required = false, name = "pictures") MultipartFile[] pictures,
-                                               @RequestPart(name = "request") @Validated final SellAddRequestDto sellAddRequestDto) throws IOException {
+    @PostMapping("/add-selllist")
+    public Response<SellAddResponseDto> addCar(@RequestPart(name = "pictures", required = false) List<MultipartFile> pictures,
+                                               @RequestPart(name = "sellAddRequestDto") SellAddRequestDto sellAddRequestDto) throws IOException {
         Long carId = sellAddRequestDto.getCarId();
 
         SellAddResponseDto sellAddResponseDto = saleListService.addCar(sellAddRequestDto);

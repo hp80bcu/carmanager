@@ -1,9 +1,7 @@
 package com.example.carmanager.v2.sell.service;
 
 import com.example.carmanager.v2.car.entity.CarImage;
-import com.example.carmanager.v2.car.entity.Option;
 import com.example.carmanager.v2.car.repository.CarImageRepository;
-import com.example.carmanager.v2.car.repository.OptionRepository;
 import com.example.carmanager.v2.s3.service.S3UploadService;
 import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
 import com.example.carmanager.v2.sell.dto.SellAddResponseDto;
@@ -13,13 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -48,6 +43,7 @@ public class SaleListService {
         saleList.setCarDescription(sellAddRequestDto.getDescription());
         saleList.setOptions(options);
         saleList.setCarId(sellAddRequestDto.getCarId());
+        saleList.setUserId(1L);
         saleListRepository.save(saleList);
         sellAddResponseDto.setCarId(sellAddRequestDto.getCarId());
         return sellAddResponseDto;
@@ -55,7 +51,7 @@ public class SaleListService {
 
     // 차량 사진 업로드
     @Transactional
-    public List<String> uploadCarImages(Long carId, MultipartFile[] pictures) throws IOException {
+    public List<String> uploadCarImages(Long carId, List<MultipartFile> pictures) throws IOException {
         List<String> fileUrls = new ArrayList<>();
 
         for (MultipartFile picture : pictures) {

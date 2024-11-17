@@ -28,6 +28,9 @@ public class SaleList {
     @Column(name = "car_description")
     private String carDescription;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "createAt")
     private Timestamp createAt;
 
