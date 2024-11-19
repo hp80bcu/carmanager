@@ -3,15 +3,17 @@ package com.example.carmanager.v2.sell.service;
 import com.example.carmanager.v2.car.dto.MyCarBasicResponseDto;
 import com.example.carmanager.v2.car.entity.CarBasic;
 import com.example.carmanager.v2.car.entity.CarImage;
+import com.example.carmanager.v2.car.entity.CarInfo1;
 import com.example.carmanager.v2.car.entity.CarInfo2;
-import com.example.carmanager.v2.car.repository.CarBasicRepository;
-import com.example.carmanager.v2.car.repository.CarImageRepository;
+import com.example.carmanager.v2.car.repository.*;
 import com.example.carmanager.v2.s3.service.S3UploadService;
 import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
 import com.example.carmanager.v2.sell.dto.SellAddResponseDto;
+import com.example.carmanager.v2.sell.dto.SellListDetailResponseDto;
 import com.example.carmanager.v2.sell.dto.SellListResponseDto;
 import com.example.carmanager.v2.sell.entity.SaleList;
 import com.example.carmanager.v2.sell.repository.SaleListRepository;
+import com.example.carmanager.v2.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,6 @@ import java.util.List;
 public class SaleListService {
     private final SaleListRepository saleListRepository;
     private final CarImageRepository carImageRepository;
-    // private final OptionRepository optionRepository;
     private final CarBasicRepository carBasicRepository;
     private final S3UploadService s3UploadService;
 
@@ -99,5 +100,39 @@ public class SaleListService {
             responseDtoList.add(dto);
         }
         return responseDtoList;
+    }
+
+    // 판매차량 상세정보 가져오기
+    public SellListDetailResponseDto getCarDetails(Long carId){
+        CarBasic carBasic = carBasicRepository.findCarByCarId(carId);
+        List<CarImage> carImage = carImageRepository.findImageByCarId(carId);
+        CarInfo2 carInfo2 = carBasic.getCarInfo2();
+        User user = carBasic.getUser();
+        SaleList saleList = saleListRepository.findSalelist1ByCarId(carId);
+
+        SellListDetailResponseDto sellListDetailResponseDto = new SellListDetailResponseDto();
+        sellListDetailResponseDto.setCarId(carId);
+        sellListDetailResponseDto.setImages(carImage);
+        sellListDetailResponseDto.setCarNum(carBasic.getCarNumber());
+        sellListDetailResponseDto.setCarModel(carBasic.getModelName());
+        sellListDetailResponseDto.setPrice(saleList.getPrice());
+        sellListDetailResponseDto.setName(user.getNickname());
+        sellListDetailResponseDto.setPhoneNumber(user.getPhone());
+        sellListDetailResponseDto.setEmail(user.getEmail());
+        sellListDetailResponseDto.setYear(carBasic.getModelYear());
+        sellListDetailResponseDto.setDistance(carBasic.getDistance());
+        sellListDetailResponseDto.setFuel(carBasic.getFuel());
+        sellListDetailResponseDto.setShift(carInfo2.getShift());
+        if(carBasic.getCarType().equals("EV")){
+            sellListDetailResponseDto.setEfficeiency(carInfo2.getElectricEfficiency());
+        } else {
+            sellListDetailResponseDto.setEfficeiency(carInfo2.getFuelEfficiency());
+        }
+        sellListDetailResponseDto.setType(carBasic.getCarType());
+        sellListDetailResponseDto.setDisplacement(carInfo2.getDisplacement());
+        sellListDetailResponseDto.setColor(carBasic.getColor());
+        sellListDetailResponseDto.setOptions(saleList.getOptions());
+        sellListDetailResponseDto.setCarDescription(saleList.getCarDescription());
+        return sellListDetailResponseDto;
     }
 }

@@ -42,6 +42,9 @@ public class CarBasic {
     @Column(name = "car_type")
     private String carType;
 
+    @Column(name = "color")
+    private String color;
+
     @Column(name = "model_year")
     private Date modelYear;
 
