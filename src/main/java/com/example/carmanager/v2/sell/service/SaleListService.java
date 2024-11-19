@@ -102,6 +102,15 @@ public class SaleListService {
         return responseDtoList;
     }
 
+    // 메인화면 차량 필터
+    public List<SellListResponseDto> getSellListFilterByCompanyAndModelAndDetail(String company, String model, String detail){
+        List<SaleList> saleLists = saleListRepository.findSaleListFilterByCompanyAndModelAndDetail(company, model, detail);
+        List<SellListResponseDto> responseDtoList = new ArrayList<>();
+        int countAllCars = carBasicRepository.countAllCarsFilterByCompanyAndModelAndDetail(company, model, detail);
+
+        return responseDtoList;
+    }
+
     // 판매차량 상세정보 가져오기
     public SellListDetailResponseDto getCarDetails(Long carId){
         CarBasic carBasic = carBasicRepository.findCarByCarId(carId);

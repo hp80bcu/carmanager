@@ -22,6 +22,17 @@ public class CarService {
     private final CarBasicRepository carBasicRepository;
     private final MaintanceRepository maintanceRepository;
 
+    public CarNumberAddResponseDto getCarByCarNumber(CarNumberAddRequestDto carNumberAddRequestDto){
+        String carNumber = carNumberAddRequestDto.getCarNumber();
+        CarBasic carBasic = carBasicRepository.findCarByCarNum(carNumber);
+        CarNumberAddResponseDto carNumberAddResponseDto = new CarNumberAddResponseDto();
+        carNumberAddResponseDto.setCompany(carBasic.getCompany());
+        carNumberAddResponseDto.setModel(carBasic.getModelName());
+        carNumberAddResponseDto.setDetail(carBasic.getModelDetail());
+
+        return carNumberAddResponseDto;
+    }
+
     /**
      * 차량 추가
      * @param carAddRequestDto

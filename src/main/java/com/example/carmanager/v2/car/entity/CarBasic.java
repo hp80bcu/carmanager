@@ -1,5 +1,6 @@
 package com.example.carmanager.v2.car.entity;
 
+import com.example.carmanager.v2.sell.entity.SaleList;
 import com.example.carmanager.v2.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,6 +46,9 @@ public class CarBasic {
     @Column(name = "color")
     private String color;
 
+    @Column(name = "company")
+    private String company;
+
     @Column(name = "model_year")
     private Date modelYear;
 
@@ -66,6 +70,9 @@ public class CarBasic {
 
     @OneToMany(mappedBy = "carBasic")
     private List<Maintance> maintance = new ArrayList<>();
+
+    @OneToMany(mappedBy = "carBasic")
+    private List<SaleList> salelist = new ArrayList<>();
 //
 //    @ManyToOne
 //    @JoinColumn(name = "maintance_id")

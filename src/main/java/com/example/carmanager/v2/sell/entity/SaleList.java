@@ -1,5 +1,7 @@
 package com.example.carmanager.v2.sell.entity;
 
+import com.example.carmanager.v2.car.entity.CarBasic;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -39,4 +43,8 @@ public class SaleList {
 
     @Column(name = "modifiedAt")
     private Timestamp modifiedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "carId")
+    private CarBasic carBasic;
 }

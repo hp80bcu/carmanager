@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,8 +38,15 @@ public class SellRestController {
     }
 
     @GetMapping("/")
-    public Response<List<SellListResponseDto>> getSellList(){
-        List<SellListResponseDto> myCarList = saleListService.getAllCars();
+    public Response<List<SellListResponseDto>> getSellList(@RequestParam(value = "company", required = false) String company,
+                                                           @RequestParam(value = "model", required = false) String model,
+                                                           @RequestParam(value = "detail", required = false) String detail){
+        List<SellListResponseDto> myCarList = new ArrayList<>();
+        if(company == null & model == null & detail == null){
+            myCarList = saleListService.getAllCars();
+        } else{
+            myCarList = saleListService.getSellListFilterByCompanyAndModelAndDetail(company, model, detail);
+        }
         return Response.success(myCarList);
     }
 

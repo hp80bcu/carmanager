@@ -16,6 +16,12 @@ public class CarRestController {
 
     private final CarService carService;
 
+    @GetMapping("/get-my-car")
+    public Response<CarNumberAddResponseDto> getMyCarByCarNum(@RequestBody CarNumberAddRequestDto carNumberAddRequestDto){
+        CarNumberAddResponseDto carNumberAddResponseDto = carService.getCarByCarNumber(carNumberAddRequestDto);
+        return Response.success(carNumberAddResponseDto);
+    }
+
     /**
      * 차량 추가
      * @param carAddRequestDto
