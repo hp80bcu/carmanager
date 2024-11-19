@@ -25,4 +25,14 @@ public interface CarBasicRepository extends JpaRepository<CarBasic, Long> {
 
     @Query("SELECT c.carNumber FROM CarBasic c WHERE c.carId = :carId")
     String findCarNumByCarId(@Param("carId") Long carId);
+
+    @Modifying
+    @Query("UPDATE CarBasic c set c.isSale = 1 WHERE c.carId = :carId")
+    void updateSale(@Param("carId")Long carId);
+
+    @Query("SELECT c FROM CarBasic c WHERE c.isSale = 1")
+    List<CarBasic> findAllByIsSaleChecked();
+
+    @Query("SELECT COUNT(c) FROM CarBasic c WHERE c.isSale = 1")
+    int countAllCars();
 }

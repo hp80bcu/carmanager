@@ -2,16 +2,14 @@ package com.example.carmanager.v2.car.entity;
 
 import com.example.carmanager.v2.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@ToString(exclude = "carBasic")  // carBasic 필드 제외
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
@@ -32,6 +30,9 @@ public class CarBasic {
     @Column(name = "model_name")
     private String modelName;
 
+    @Column(name = "region")
+    private String region;
+
     @Column(name = "model_detail")
     private String modelDetail;
 
@@ -50,6 +51,8 @@ public class CarBasic {
     @Column(name = "isChecked")
     private Integer isChecked;
 
+    @Column(name = "isSale")
+    private Integer isSale;
 //    @ManyToOne
 //    @JoinColumn(name = "carinfo1_id")
 //    private CarInfo1 carInfo1;

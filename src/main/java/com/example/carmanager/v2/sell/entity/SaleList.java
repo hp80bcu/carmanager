@@ -25,6 +25,9 @@ public class SaleList {
     @Column(name = "options")
     private String options;
 
+    @Column(name = "price")
+    private int price;
+
     @Column(name = "car_description")
     private String carDescription;
 

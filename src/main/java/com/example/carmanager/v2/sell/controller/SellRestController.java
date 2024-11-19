@@ -1,5 +1,8 @@
 package com.example.carmanager.v2.sell.controller;
 
+import com.example.carmanager.v2.car.dto.MyCarBasicResponseDto;
+import com.example.carmanager.v2.sell.dto.SellListDetailResponseDto;
+import com.example.carmanager.v2.sell.dto.SellListResponseDto;
 import com.example.carmanager.v2.util.Response;
 import com.example.carmanager.v2.s3.service.S3UploadService;
 import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
@@ -35,5 +38,17 @@ public class SellRestController {
         } catch (IOException e) {
             return Response.error("Image upload failed.");
         }
+    }
+
+    @GetMapping("/")
+    public Response<List<SellListResponseDto>> getSellList(){
+        List<SellListResponseDto> myCarList = saleListService.getAllCars();
+        return Response.success(myCarList);
+    }
+
+    @GetMapping("/{carId}")
+    public Response<SellListDetailResponseDto> getCarDetails(@PathVariable("carId") Long carId){
+        SellListDetailResponseDto sellListResponseDto = new SellListDetailResponseDto();
+        return Response.success(sellListResponseDto);
     }
 }
