@@ -71,7 +71,7 @@ public class CarBasic {
     @OneToMany(mappedBy = "carBasic")
     private List<Maintance> maintance = new ArrayList<>();
 
-    @OneToMany(mappedBy = "carBasic")
+    @OneToMany(mappedBy = "carBasic", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<SaleList> salelist = new ArrayList<>();
 //
 //    @ManyToOne

@@ -104,10 +104,28 @@ public class SaleListService {
 
     // 메인화면 차량 필터
     public List<SellListResponseDto> getSellListFilterByCompanyAndModelAndDetail(String company, String model, String detail){
-        List<SaleList> saleLists = saleListRepository.findSaleListFilterByCompanyAndModelAndDetail(company, model, detail);
+        List<CarBasic> carBasicList = carBasicRepository.findAllByIsSaleChecked();
+        List<SaleList> saleList = saleListRepository.findAll();
         List<SellListResponseDto> responseDtoList = new ArrayList<>();
-        int countAllCars = carBasicRepository.countAllCarsFilterByCompanyAndModelAndDetail(company, model, detail);
+        int countAllCars = carBasicRepository.countAllCars();
 
+        for (CarBasic carBasic  : carBasicList) {
+            SellListResponseDto dto = new SellListResponseDto();
+            for(SaleList sale : saleList){
+                dto.setHowManyCar(countAllCars);
+                dto.setModel(carBasic.getModelName());
+                dto.setDistance(carBasic.getDistance());
+                dto.setFuel(carBasic.getFuel());
+                dto.setPrice(sale.getPrice());
+                dto.setCarId(sale.getCarId());
+                dto.setRegion(carBasic.getRegion());
+                dto.setYear(carBasic.getModelYear());
+            }
+            if(carBasic.getCompany().equals(company) && carBasic.getModelName().equals(model) && carBasic.getModelDetail().equals(detail)){
+                responseDtoList.add(dto);
+            }
+
+        }
         return responseDtoList;
     }
 

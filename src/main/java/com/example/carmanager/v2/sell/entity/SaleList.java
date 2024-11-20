@@ -45,6 +45,6 @@ public class SaleList {
     private Timestamp modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carId")
+    @JoinColumn(name = "car_id", insertable=false, updatable=false)
     private CarBasic carBasic;
 }
