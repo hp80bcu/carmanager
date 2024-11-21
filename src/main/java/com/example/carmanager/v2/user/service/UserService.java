@@ -14,7 +14,7 @@ public class UserService {
     public UserDTO getUserInfo(Long userId) {
         User user = userRepository.findByUserId(userId);
         UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getNickname());
+        userDTO.setNickname(user.getNickname());
         userDTO.setPhoneNumber(user.getPhone());
         userDTO.setAddress(user.getAddress());
         return userDTO;
@@ -26,7 +26,7 @@ public class UserService {
         userRepository.modifyUser(userId, nickname, phone, address);
         User user = userRepository.findByUserId(userId);
         UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getNickname());
+        userDTO.setNickname(user.getNickname());
         userDTO.setPhoneNumber(user.getPhone());
         userDTO.setAddress(user.getAddress());
         return userDTO;

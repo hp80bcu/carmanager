@@ -70,7 +70,7 @@ public class UserRestController {
     /* 회원 정보 수정 */
     @PutMapping("/{userId}")
     public Response<UserDTO> modifyUser(@PathVariable("userId") Long userId, @RequestBody UserDTO userDTO) {
-        String nickname = userDTO.getUsername();
+        String nickname = userDTO.getNickname();
         String phone = userDTO.getPhoneNumber();
         String address = userDTO.getAddress();
         userDTO = userService.modifyUser(userId, nickname, phone, address);// 서비스에서 사용자 정보 가져오기

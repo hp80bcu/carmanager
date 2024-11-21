@@ -61,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // UserDTO를 생성하여 값 set
         UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(username);
+        userDTO.setNickname(username);
         userDTO.setRole(role);
         userDTO.setUserId(id);
 
