@@ -60,10 +60,13 @@ public class CarBasic {
 
     @Column(name = "isSale")
     private Integer isSale;
+
+    @Column(name = "profile_image")
+    private String profileImage;
 //    @ManyToOne
 //    @JoinColumn(name = "carinfo1_id")
 //    private CarInfo1 carInfo1;
-//
+
     @ManyToOne
     @JoinColumn(name = "carinfo2_id")
     private CarInfo2 carInfo2;

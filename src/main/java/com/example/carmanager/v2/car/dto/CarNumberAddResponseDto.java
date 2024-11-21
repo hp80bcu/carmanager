@@ -7,4 +7,5 @@ public class CarNumberAddResponseDto {
     private String company;
     private String model;
     private String detail;
+    private String image;
 }

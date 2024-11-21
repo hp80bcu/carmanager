@@ -29,6 +29,7 @@ public class CarService {
         carNumberAddResponseDto.setCompany(carBasic.getCompany());
         carNumberAddResponseDto.setModel(carBasic.getModelName());
         carNumberAddResponseDto.setDetail(carBasic.getModelDetail());
+        carNumberAddResponseDto.setImage(carBasic.getProfileImage());
 
         return carNumberAddResponseDto;
     }
