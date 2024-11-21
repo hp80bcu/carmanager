@@ -39,6 +39,8 @@ public class CustomOAuth2User implements OAuth2User {
         return userDTO.getUsername();
     }
 
+    public String getPhoneNumber(){ return userDTO.getPhoneNumber();}
+    public String getAddress(){ return userDTO.getAddress();}
     public Long getId() {
         log.info("CustomOAuth2User단에서의 id :" + userDTO.getUserId());
         return userDTO.getUserId();

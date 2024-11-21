@@ -31,8 +31,8 @@ public class User {
     @Column(name = "birth")
     private Date birth;
 
-    @Column(name = "adress")
-    private String adress;
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "phone")
     private String phone;

@@ -16,7 +16,7 @@ public class CarRestController {
 
     private final CarService carService;
 
-    @GetMapping("/get-my-car")
+    @PostMapping("/get-my-car")
     public Response<CarNumberAddResponseDto> getMyCarByCarNum(@RequestBody CarNumberAddRequestDto carNumberAddRequestDto){
         CarNumberAddResponseDto carNumberAddResponseDto = carService.getCarByCarNumber(carNumberAddRequestDto);
         return Response.success(carNumberAddResponseDto);

@@ -20,7 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByEmailAndProvider(String Email, String provider);
     @Query("SELECT u.userId FROM User u WHERE u.email = :email AND u.provider = :provider")
     Long findUserIdByEmailAndProvider(@Param("email") String email, @Param("provider") String provider);
+
     @Modifying
-    @Query(value = "DELETE FROM User u WHERE u.userId = :userId", nativeQuery = true)
+    @Query(value = "UPDATE User u SET u.nickname = :nickname, u.phone = :phone, u.address = :address WHERE u.userId = :userId")
+    void modifyUser(@Param("userId")Long userId, @Param("nickname")String nickname, @Param("phone")String phone, @Param("address") String address);
+    @Modifying
+    @Query(value = "DELETE FROM User u WHERE u.userId = :userId")
     void deleteById(Long userId);
 }
