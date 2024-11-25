@@ -23,7 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -79,15 +82,21 @@ public class SaleListService {
     }
 
     // 판매 등록된 모든 차량 가져오기
-    public List<SellListResponseDto> getAllCars(){
+    public List<SellListResponseDto> getAllCars(String sort) {
         List<CarBasic> carBasicList = carBasicRepository.findAllByIsSaleChecked();
         List<SaleList> saleList = saleListRepository.findAll();
         List<SellListResponseDto> responseDtoList = new ArrayList<>();
         int countAllCars = carBasicRepository.countAllCars();
 
-        for (CarBasic carBasic  : carBasicList) {
-            SellListResponseDto dto = new SellListResponseDto();
-            for(SaleList sale : saleList){
+        // SaleList를 carId 기준으로 매핑
+        Map<Long, SaleList> saleListMap = saleList.stream()
+                .collect(Collectors.toMap(SaleList::getCarId, sale -> sale));
+
+        // carBasicList 순회
+        for (CarBasic carBasic : carBasicList) {
+            SaleList sale = saleListMap.get(carBasic.getCarId());
+            if (sale != null) {
+                SellListResponseDto dto = new SellListResponseDto();
                 dto.setHowManyCar(countAllCars);
                 dto.setModel(carBasic.getModelName());
                 dto.setDistance(carBasic.getDistance());
@@ -95,12 +104,25 @@ public class SaleListService {
                 dto.setPrice(sale.getPrice());
                 dto.setCarId(sale.getCarId());
                 dto.setRegion(carBasic.getRegion());
-                dto.setYear(carBasic.getModelYear());
+                dto.setYear((carBasic.getModelYear()));
+                dto.setRegistDate(sale.getCreateAt());
+
+                responseDtoList.add(dto);
             }
-            responseDtoList.add(dto);
+        }
+        // sort 조건에 따른 내림차순 정렬
+        if ("price".equalsIgnoreCase(sort)) {
+            responseDtoList.sort(Comparator.comparingInt(SellListResponseDto::getPrice).reversed());
+        } else if ("distance".equalsIgnoreCase(sort)) {
+            responseDtoList.sort(Comparator.comparingInt(SellListResponseDto::getDistance).reversed());
+        } else if ("year".equalsIgnoreCase(sort)) {
+            responseDtoList.sort(Comparator.comparingInt(SellListResponseDto::getYear).reversed());
+        } else if ("createAt".equalsIgnoreCase(sort)) {  // 최근 등록순 정렬 추가
+            responseDtoList.sort(Comparator.comparing(SellListResponseDto::getRegistDate).reversed());
         }
         return responseDtoList;
     }
+
 
     // 메인화면 차량 필터
     public List<SellListResponseDto> getSellListFilterByCompanyAndModelAndDetail(String company, String model, String detail){

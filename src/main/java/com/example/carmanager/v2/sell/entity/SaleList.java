@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class SaleList {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "createAt")
+    @Column(name = "createAt", updatable = false)
+    @UpdateTimestamp
     private Timestamp createAt;
 
     @Column(name = "modifiedAt")

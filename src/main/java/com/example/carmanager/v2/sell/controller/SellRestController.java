@@ -40,10 +40,12 @@ public class SellRestController {
     @GetMapping("/")
     public Response<List<SellListResponseDto>> getSellList(@RequestParam(value = "company", required = false) String company,
                                                            @RequestParam(value = "model", required = false) String model,
-                                                           @RequestParam(value = "detail", required = false) String detail){
+                                                           @RequestParam(value = "detail", required = false) String detail,
+                                                           @RequestParam(value = "sort", required = false) String sort
+    ) {
         List<SellListResponseDto> myCarList = new ArrayList<>();
         if(company == null & model == null & detail == null){
-            myCarList = saleListService.getAllCars();
+            myCarList = saleListService.getAllCars(sort);
         } else{
             myCarList = saleListService.getSellListFilterByCompanyAndModelAndDetail(company, model, detail);
         }

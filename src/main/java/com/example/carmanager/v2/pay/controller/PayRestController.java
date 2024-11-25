@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @Slf4j
 public class PayRestController {
-
     public Response<PaymentResponse> pay(@RequestBody PaymentRequest paymentRequest){
         return null;
     }
