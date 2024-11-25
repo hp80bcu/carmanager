@@ -81,8 +81,8 @@ public class SaleListService {
         return fileUrls;
     }
 
-    // 판매 등록된 모든 차량 가져오기
-    public List<SellListResponseDto> getAllCars(String sort) {
+    // 판매 등록된 모든 차량 가져오기 또는 필터링된 차량 가져오기
+    public List<SellListResponseDto> getSellList(String sort, String company, String model, String detail) {
         List<CarBasic> carBasicList = carBasicRepository.findAllByIsSaleChecked();
         List<SaleList> saleList = saleListRepository.findAll();
         List<SellListResponseDto> responseDtoList = new ArrayList<>();
@@ -94,22 +94,29 @@ public class SaleListService {
 
         // carBasicList 순회
         for (CarBasic carBasic : carBasicList) {
+            // SaleList와 carBasic 매핑
             SaleList sale = saleListMap.get(carBasic.getCarId());
             if (sale != null) {
-                SellListResponseDto dto = new SellListResponseDto();
-                dto.setHowManyCar(countAllCars);
-                dto.setModel(carBasic.getModelName());
-                dto.setDistance(carBasic.getDistance());
-                dto.setFuel(carBasic.getFuel());
-                dto.setPrice(sale.getPrice());
-                dto.setCarId(sale.getCarId());
-                dto.setRegion(carBasic.getRegion());
-                dto.setYear((carBasic.getModelYear()));
-                dto.setRegistDate(sale.getCreateAt());
+                // 필터링 조건이 있을 경우 해당 조건에 맞는 차만 추가
+                if ((company == null || carBasic.getCompany().equals(company)) &&
+                        (model == null || carBasic.getModelName().equals(model)) &&
+                        (detail == null || carBasic.getModelDetail().equals(detail))) {
 
-                responseDtoList.add(dto);
+                    SellListResponseDto dto = new SellListResponseDto();
+                    dto.setHowManyCar(countAllCars);
+                    dto.setModel(carBasic.getModelName());
+                    dto.setDistance(carBasic.getDistance());
+                    dto.setFuel(carBasic.getFuel());
+                    dto.setPrice(sale.getPrice());
+                    dto.setCarId(sale.getCarId());
+                    dto.setRegion(carBasic.getRegion());
+                    dto.setYear(carBasic.getModelYear());
+                    dto.setRegistDate(sale.getCreateAt());
+                    responseDtoList.add(dto);
+                }
             }
         }
+
         // sort 조건에 따른 내림차순 정렬
         if ("price".equalsIgnoreCase(sort)) {
             responseDtoList.sort(Comparator.comparingInt(SellListResponseDto::getPrice).reversed());
@@ -120,36 +127,10 @@ public class SaleListService {
         } else if ("createAt".equalsIgnoreCase(sort)) {  // 최근 등록순 정렬 추가
             responseDtoList.sort(Comparator.comparing(SellListResponseDto::getRegistDate).reversed());
         }
+
         return responseDtoList;
     }
 
-
-    // 메인화면 차량 필터
-    public List<SellListResponseDto> getSellListFilterByCompanyAndModelAndDetail(String company, String model, String detail){
-        List<CarBasic> carBasicList = carBasicRepository.findAllByIsSaleChecked();
-        List<SaleList> saleList = saleListRepository.findAll();
-        List<SellListResponseDto> responseDtoList = new ArrayList<>();
-        int countAllCars = carBasicRepository.countAllCars();
-
-        for (CarBasic carBasic  : carBasicList) {
-            SellListResponseDto dto = new SellListResponseDto();
-            for(SaleList sale : saleList){
-                dto.setHowManyCar(countAllCars);
-                dto.setModel(carBasic.getModelName());
-                dto.setDistance(carBasic.getDistance());
-                dto.setFuel(carBasic.getFuel());
-                dto.setPrice(sale.getPrice());
-                dto.setCarId(sale.getCarId());
-                dto.setRegion(carBasic.getRegion());
-                dto.setYear(carBasic.getModelYear());
-            }
-            if(carBasic.getCompany().equals(company) && carBasic.getModelName().equals(model) && carBasic.getModelDetail().equals(detail)){
-                responseDtoList.add(dto);
-            }
-
-        }
-        return responseDtoList;
-    }
 
     // 판매차량 상세정보 가져오기
     public SellListDetailResponseDto getCarDetails(Long carId){

@@ -43,12 +43,7 @@ public class SellRestController {
                                                            @RequestParam(value = "detail", required = false) String detail,
                                                            @RequestParam(value = "sort", required = false) String sort
     ) {
-        List<SellListResponseDto> myCarList = new ArrayList<>();
-        if(company == null & model == null & detail == null){
-            myCarList = saleListService.getAllCars(sort);
-        } else{
-            myCarList = saleListService.getSellListFilterByCompanyAndModelAndDetail(company, model, detail);
-        }
+        List<SellListResponseDto> myCarList = saleListService.getSellList(sort, company, model, detail);
         return Response.success(myCarList);
     }
 
