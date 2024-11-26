@@ -86,7 +86,6 @@ public class SaleListService {
         List<CarBasic> carBasicList = carBasicRepository.findAllByIsSaleChecked();
         List<SaleList> saleList = saleListRepository.findAll();
         List<SellListResponseDto> responseDtoList = new ArrayList<>();
-        int countAllCars = carBasicRepository.countAllCars();
 
         // SaleList를 carId 기준으로 매핑
         Map<Long, SaleList> saleListMap = saleList.stream()
@@ -103,7 +102,7 @@ public class SaleListService {
                         (detail == null || carBasic.getModelDetail().equals(detail))) {
 
                     SellListResponseDto dto = new SellListResponseDto();
-                    dto.setHowManyCar(countAllCars);
+                    dto.setProfileImage(carImageRepository.findImageByCarIdLimit1(carBasic.getCarId()));
                     dto.setModel(carBasic.getModelName());
                     dto.setDistance(carBasic.getDistance());
                     dto.setFuel(carBasic.getFuel());
@@ -112,9 +111,16 @@ public class SaleListService {
                     dto.setRegion(carBasic.getRegion());
                     dto.setYear(carBasic.getModelYear());
                     dto.setRegistDate(sale.getCreateAt());
+
                     responseDtoList.add(dto);
                 }
             }
+        }
+
+        // responseDtoList의 사이즈를 전체 차량 수로 설정
+        int totalCars = responseDtoList.size();
+        for (SellListResponseDto dto : responseDtoList) {
+            dto.setHowManyCar(totalCars);  // 모든 DTO에 동일한 차량 수 설정
         }
 
         // sort 조건에 따른 내림차순 정렬
@@ -130,6 +136,7 @@ public class SaleListService {
 
         return responseDtoList;
     }
+
 
 
     // 판매차량 상세정보 가져오기
