@@ -44,4 +44,7 @@ public interface CarBasicRepository extends JpaRepository<CarBasic, Long> {
 
     @Query("SELECT COUNT(c) FROM CarBasic c WHERE c.isSale = 1 And c.company = :company And c.modelName = :model And c.modelDetail = :detail ")
     int countAllCarsFilterByCompanyAndModelAndDetail(@Param("company") String company, @Param("model") String model, @Param("detail") String detail);
+
+    @Query("SELECT c.profileImage FROM CarBasic c WHERE c.carId = :carId")
+    String findImage(@Param("carId") Long carId);
 }

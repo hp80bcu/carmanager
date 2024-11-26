@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 public class MyCarBasicResponseDto {
     private String carNum;
+    private String image;
     private String company;
     private String model;
     private String modelDetail;
