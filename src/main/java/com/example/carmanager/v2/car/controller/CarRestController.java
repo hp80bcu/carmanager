@@ -35,7 +35,7 @@ public class CarRestController {
 
     @GetMapping("/{userId}")
     public Response<List<MyCarBasicResponseDto>> getMycar(@PathVariable("userId") Long userId){
-        List<MyCarBasicResponseDto> myCarList = carService.getMyCar();
+        List<MyCarBasicResponseDto> myCarList = carService.getMyCar(userId);
         return Response.success(myCarList);
     }
 

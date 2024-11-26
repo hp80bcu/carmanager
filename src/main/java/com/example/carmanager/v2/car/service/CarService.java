@@ -61,8 +61,7 @@ public class CarService {
      * 내 차량 정보 모두 조회
      * @return
      */
-    public List<MyCarBasicResponseDto> getMyCar() {
-        Long userId = 1L;
+    public List<MyCarBasicResponseDto> getMyCar(Long userId) {
         List<CarBasic> carBasicList = carBasicRepository.findAllByUserId(userId);
         List<MyCarBasicResponseDto> responseDtoList = new ArrayList<>();
 

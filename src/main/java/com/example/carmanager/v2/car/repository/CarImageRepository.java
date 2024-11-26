@@ -14,6 +14,6 @@ public interface CarImageRepository extends JpaRepository<CarImage, Long> {
     @Query("SELECT c FROM CarImage c WHERE c.carId = :carId")
     List<CarImage> findImageByCarId(@Param("carId") Long carId);
 
-    @Query(value = "SELECT file FROM car_image WHERE car_id = :carId LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT file  FROM car_image WHERE car_id = :carId LIMIT 1", nativeQuery = true)
     String findImageByCarIdLimit1(@Param("carId") Long carId);
 }
