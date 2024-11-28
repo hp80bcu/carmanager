@@ -47,4 +47,7 @@ public interface CarBasicRepository extends JpaRepository<CarBasic, Long> {
 
     @Query("SELECT c.profileImage FROM CarBasic c WHERE c.carId = :carId")
     String findImage(@Param("carId") Long carId);
+
+    @Query(value = "SELECT user_id FROM car_basic WHERE car_id = :carId", nativeQuery = true)
+    Long findUserId(@Param("carId") Long carId);
 }

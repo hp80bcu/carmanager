@@ -43,8 +43,9 @@ public class SaleListService {
         SellAddResponseDto sellAddResponseDto = new SellAddResponseDto();
 
         // 판매리스트 정보 등록
+        Long userId = carBasicRepository.findUserId(sellAddRequestDto.getCarId());
         SaleList saleList = new SaleList();
-        saleList.setUserId(sellAddRequestDto.getUserId());
+        saleList.setUserId(userId);
         saleList.setCarDescription(sellAddRequestDto.getDescription());
         saleList.setPrice(sellAddRequestDto.getPrice());
         saleList.setOptions(options);
