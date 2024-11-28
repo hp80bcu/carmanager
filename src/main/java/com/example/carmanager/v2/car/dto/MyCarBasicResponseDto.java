@@ -20,4 +20,5 @@ public class MyCarBasicResponseDto {
     private Double displacement;
     private String fuel;
     private String shift;
+    private int isSale;
 }

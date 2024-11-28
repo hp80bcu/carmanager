@@ -78,6 +78,11 @@ public class CarService {
             dto.setColor(carBasic.getCarType());
             dto.setFirstRegisterDate(new Timestamp(carBasic.getModelYear().getTime()));
             dto.setFuel(carBasic.getFuel());
+            if(carBasic.getIsSale() == 1){
+                dto.setIsSale(1);
+            } else {
+                dto.setIsSale(0);
+            }
 
             // CarInfo2 정보 매핑
             CarInfo2 carInfo2 = carBasic.getCarInfo2();
