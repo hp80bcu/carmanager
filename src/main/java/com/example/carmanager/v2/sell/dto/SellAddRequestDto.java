@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SellAddRequestDto {
+    Long userId;
     Long carId;
     String carNumber;
     String[] Options;

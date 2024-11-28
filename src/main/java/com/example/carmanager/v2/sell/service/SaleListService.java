@@ -44,10 +44,11 @@ public class SaleListService {
 
         // 판매리스트 정보 등록
         SaleList saleList = new SaleList();
+        saleList.setUserId(sellAddRequestDto.getUserId());
         saleList.setCarDescription(sellAddRequestDto.getDescription());
+        saleList.setPrice(sellAddRequestDto.getPrice());
         saleList.setOptions(options);
         saleList.setCarId(sellAddRequestDto.getCarId());
-        saleList.setUserId(1L);
         saleListRepository.save(saleList);
         carBasicRepository.updateSale(sellAddRequestDto.getCarId());
         sellAddResponseDto.setCarId(sellAddRequestDto.getCarId());
