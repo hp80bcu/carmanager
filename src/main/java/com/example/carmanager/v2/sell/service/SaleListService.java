@@ -22,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,12 +37,8 @@ public class SaleListService {
 
     // 판매리스트 등록
     public SellAddResponseDto addCar(SellAddRequestDto sellAddRequestDto) throws IOException {
-        String outerOptions = String.join(", ", sellAddRequestDto.getOuterOptions());
-        String innerOptions = String.join(", ", sellAddRequestDto.getInnerOptions());
-        String safetyOptions = String.join(", ", sellAddRequestDto.getSafetyOptions());
-        String multipleOptions = String.join(", ", sellAddRequestDto.getMultipleOptions());
 
-        String options = outerOptions + ", " + innerOptions + ", " + safetyOptions + ", " + multipleOptions;
+        String options = Arrays.toString(sellAddRequestDto.getOptions());
 
         SellAddResponseDto sellAddResponseDto = new SellAddResponseDto();
 
@@ -103,6 +96,7 @@ public class SaleListService {
 
                     SellListResponseDto dto = new SellListResponseDto();
                     dto.setProfileImage(carImageRepository.findImageByCarIdLimit1(carBasic.getCarId()));
+                    dto.setCompany(carBasic.getCompany());
                     dto.setModel(carBasic.getModelName());
                     dto.setDistance(carBasic.getDistance());
                     dto.setFuel(carBasic.getFuel());

@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Data
 public class MyCarBasicResponseDto {
+    private Long carId;
     private String carNum;
     private String image;
     private String company;

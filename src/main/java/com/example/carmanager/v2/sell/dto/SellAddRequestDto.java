@@ -7,10 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SellAddRequestDto {
     Long carId;
     String carNumber;
-    String[] outerOptions;
-    String[] innerOptions;
-    String[] safetyOptions;
-    String[] multipleOptions;
+    String[] Options;
     int distance;
     int price;
     String description;

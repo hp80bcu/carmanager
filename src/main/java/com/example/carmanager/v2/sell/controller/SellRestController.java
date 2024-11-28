@@ -6,6 +6,7 @@ import com.example.carmanager.v2.util.Response;
 import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
 import com.example.carmanager.v2.sell.dto.SellAddResponseDto;
 import com.example.carmanager.v2.sell.service.SaleListService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,18 +19,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sells/*")
+@RequestMapping("/sells")
 @Slf4j
 public class SellRestController {
     private final SaleListService saleListService;
-    @PostMapping("/add-selllist")
-    public Response<SellAddResponseDto> addCar(@RequestPart(name = "pictures", required = false) List<MultipartFile> pictures,
-                                               @RequestPart(name = "sellAddRequestDto") SellAddRequestDto sellAddRequestDto) throws IOException {
+    @PostMapping("")
+    public Response<SellAddResponseDto> addCar(
+            @RequestPart(name = "pictures", required = false) List<MultipartFile> pictures,
+            @RequestPart(name = "sellAddRequestDto") String sellAddRequestDtoJson) throws IOException {
+
+        // 1. JSON 문자열을 SellAddRequestDto 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        SellAddRequestDto sellAddRequestDto = objectMapper.readValue(sellAddRequestDtoJson, SellAddRequestDto.class);
         Long carId = sellAddRequestDto.getCarId();
 
+        // 2. 서비스 호출: 차량 정보 추가
         SellAddResponseDto sellAddResponseDto = saleListService.addCar(sellAddRequestDto);
 
         try {
+            // 3. 이미지 업로드 처리
             saleListService.uploadCarImages(carId, pictures);
             return Response.success(sellAddResponseDto);
         } catch (IOException e) {
@@ -37,10 +45,11 @@ public class SellRestController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public Response<List<SellListResponseDto>> getSellList(@RequestParam(value = "company", required = false) String company,
                                                            @RequestParam(value = "model", required = false) String model,
                                                            @RequestParam(value = "detail", required = false) String detail,
+                                                           @RequestParam(value = "carNum", required = false) String carNum,
                                                            @RequestParam(value = "sort", required = false) String sort
     ) {
         List<SellListResponseDto> myCarList = saleListService.getSellList(sort, company, model, detail);

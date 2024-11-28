@@ -10,6 +10,7 @@ import java.util.Date;
 public class SellListResponseDto {
     private Long carId;
     private int howManyCar;
+    private String company;
     private String profileImage;
     private String model;
     private Timestamp registDate;

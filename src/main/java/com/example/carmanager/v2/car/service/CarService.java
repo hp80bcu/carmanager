@@ -67,6 +67,7 @@ public class CarService {
 
         for (CarBasic carBasic : carBasicList) {
             MyCarBasicResponseDto dto = new MyCarBasicResponseDto();
+            dto.setCarId(carBasic.getCarId());
             dto.setImage(carBasicRepository.findImage(carBasic.getCarId()));
             dto.setCarNum(carBasic.getCarNumber());
             dto.setCompany(carBasic.getCarType());
