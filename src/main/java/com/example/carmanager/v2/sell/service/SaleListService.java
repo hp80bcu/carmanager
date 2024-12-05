@@ -7,10 +7,7 @@ import com.example.carmanager.v2.car.entity.CarInfo1;
 import com.example.carmanager.v2.car.entity.CarInfo2;
 import com.example.carmanager.v2.car.repository.*;
 import com.example.carmanager.v2.s3.service.S3UploadService;
-import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
-import com.example.carmanager.v2.sell.dto.SellAddResponseDto;
-import com.example.carmanager.v2.sell.dto.SellListDetailResponseDto;
-import com.example.carmanager.v2.sell.dto.SellListResponseDto;
+import com.example.carmanager.v2.sell.dto.*;
 import com.example.carmanager.v2.sell.entity.SaleList;
 import com.example.carmanager.v2.sell.repository.SaleListRepository;
 import com.example.carmanager.v2.user.entity.User;
@@ -168,4 +165,36 @@ public class SaleListService {
         sellListDetailResponseDto.setCarDescription(saleList.getCarDescription());
         return sellListDetailResponseDto;
     }
+
+    // 차량 시세 비교
+    public PriceComparisonResponseDto getCarComparionPrice(String carModel) {
+        // 모델 이름이 일치하는 차량의 가격 리스트를 추출
+        List<Integer> carPrices = saleListRepository.findAll().stream()
+                .filter(saleList -> carModel.equals(saleList.getCarBasic().getModelName()))
+                .map(SaleList::getPrice)
+                .toList();
+
+        // 빈 리스트 처리
+        if (carPrices.isEmpty()) {
+            throw new IllegalArgumentException("No cars found for the given model.");
+        }
+
+        // 최댓값 계산
+        int maxPrice = carPrices.stream().mapToInt(Integer::intValue).max().orElse(0);
+
+        // 최솟값 계산
+        int minPrice = carPrices.stream().mapToInt(Integer::intValue).min().orElse(0);
+
+        // 평균값 계산
+        int averagePrice = (int) carPrices.stream().mapToInt(Integer::intValue).average().orElse(0);
+
+        PriceComparisonResponseDto priceComparisonResponseDto = new PriceComparisonResponseDto();
+
+        priceComparisonResponseDto.setHighPrice(maxPrice);
+        priceComparisonResponseDto.setAvgPrice(averagePrice);
+        priceComparisonResponseDto.setLowPrice(minPrice);
+        // 결과 DTO 생성 및 반환
+        return priceComparisonResponseDto;
+    }
+
 }

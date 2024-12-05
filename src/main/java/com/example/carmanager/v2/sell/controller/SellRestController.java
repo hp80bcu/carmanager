@@ -1,10 +1,7 @@
 package com.example.carmanager.v2.sell.controller;
 
-import com.example.carmanager.v2.sell.dto.SellListDetailResponseDto;
-import com.example.carmanager.v2.sell.dto.SellListResponseDto;
+import com.example.carmanager.v2.sell.dto.*;
 import com.example.carmanager.v2.util.Response;
-import com.example.carmanager.v2.sell.dto.SellAddRequestDto;
-import com.example.carmanager.v2.sell.dto.SellAddResponseDto;
 import com.example.carmanager.v2.sell.service.SaleListService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +57,11 @@ public class SellRestController {
     public Response<SellListDetailResponseDto> getCarDetails(@PathVariable("carId") Long carId){
         SellListDetailResponseDto sellListResponseDto = saleListService.getCarDetails(carId);
         return Response.success(sellListResponseDto);
+    }
+
+    @GetMapping("/comparison-price/{carModel}")
+    public Response<PriceComparisonResponseDto> getCarPriceComparison(@PathVariable("carModel") String carModel){
+        PriceComparisonResponseDto priceComparisonResponseDto = saleListService.getCarComparionPrice(carModel);
+        return Response.success(priceComparisonResponseDto);
     }
 }
